@@ -1,0 +1,106 @@
+:root {
+  /* Bảng màu Vintage */
+  --color-primary: #5D4037;       /* Nâu đậm (Chocolate) - Dùng cho Header, Text chính */
+  --color-secondary: #8D6E63;     /* Nâu nhạt - Dùng cho border, text phụ */
+  --color-bg-main: #EFEBE0;       /* Kem tối (Giấy cũ) - Dùng cho nền trang */
+  --color-bg-card: #FAF8F1;       /* Trắng ngà - Dùng cho nền bảng/form */
+  --color-text-main: #3E2723;     /* Nâu đen - Dùng cho chữ */
+  --color-danger: #D32F2F;        /* Đỏ trầm - Dùng cho nút xóa/hủy */
+  
+  /* Font chữ */
+  --font-serif: 'Times New Roman', serif; /* Tiêu đề */
+  --font-sans: 'Arial', sans-serif;       /* Nội dung */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Các class tiện ích dùng chung */
+.vintage-title {
+  font-family: var(--font-serif);
+  color: var(--color-primary);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.vintage-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid #D7CCC8;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.btn-primary {
+  background-color: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+/* Thêm Class cho nút hành động trong bảng */
+.btn-action-edit {
+  background-color: #FBC02D; /* Vàng đậm */
+  color: #3E2723;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  margin-right: 5px;
+}
+
+.btn-action-delete {
+  background-color: #D32F2F; /* Đỏ */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/* Class cho nút Lưu (Nền kem đậm) */
+.btn-submit {
+  background-color: #D7CCC8; /* Kem nâu đậm */
+  color: #3E2723;
+  border: 1px solid #5D4037;
+  padding: 10px;
+  width: 100%;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-submit:hover {
+  background-color: #A1887F; /* Đậm hơn khi hover */
+  color: #fff;
+}
+
+/* Class cho nút Hủy (Nổi bật) */
+.btn-cancel {
+  background-color: #8D6E63;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 4px;
+}
