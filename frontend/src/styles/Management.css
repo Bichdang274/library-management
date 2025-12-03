@@ -1,0 +1,183 @@
+/* --- 1. IMPORT FONTS --- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;600&display=swap');
+
+/* --- 2. VARIABLES & RESET --- */
+:root {
+  /* 🔥 TÔNG NÂU TỐI HƠN & TRẦM HƠN 🔥 */
+  --bg-paper: #e6dfcf;       /* Màu giấy cũ ngả nâu (Be đất) */
+  --bg-aged: #d7ccc8;        /* Màu nền phụ tối hơn */
+  --text-ink: #281912;       /* Màu chữ nâu đen (gần như đen cafe) */
+  --wood-dark: #4e342e;      /* Màu nâu gỗ sồi đậm */
+  
+  --brown-accent: #795548;   /* Màu nâu đất sét (Accent trầm tính) */
+  
+  /* Màu thẻ chức năng (Không để trắng tinh nữa mà hơi ngả màu) */
+  --card-bg: #f5f1e8; 
+  --card-border-color: #8d6e63; 
+  --card-shadow-color: #3e2723; /* Bóng đổ rất đậm */
+
+  --shadow-retro: 3px 3px 0px var(--card-shadow-color); /* Bóng đổ nhỏ lại chút cho hợp với thẻ nhỏ */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* --- 3. CONTAINER CHÍNH --- */
+.management-container {
+  min-height: 100vh;
+  background-color: var(--bg-paper);
+  /* Họa tiết vân giấy nhiễu hạt để tạo độ cũ kỹ */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+  font-family: 'Source Sans 3', sans-serif;
+  color: var(--text-ink);
+  padding-bottom: 40px;
+}
+
+/* --- 4. HEADER --- */
+.admin-header {
+  background-color: #5D4037;
+  border-bottom: 3px solid var(--wood-dark); /* Viền đơn nhưng đậm */
+  padding: 15px 30px; /* Giảm padding header chút cho gọn */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-section h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem; /* Giảm cỡ chữ tiêu đề chút */
+  font-weight: 700;
+  margin: 0;
+  color: #ffffff; 
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.logo-section p {
+  margin: 2px 0 0 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #fff;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color:#fff;
+}
+
+.btn-logout {
+  background-color: transparent;
+  border: 1px solid #fff;
+  padding: 6px 18px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.btn-logout:hover {
+  background-color: var(--wood-dark);
+  color: #fff;
+}
+
+/* --- 5. MAIN CONTENT --- */
+.grid-menu-container {
+  max-width: 1000px; /* Giới hạn chiều rộng tổng thể hẹp hơn để các ô xích lại gần nhau */
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.menu-group {
+  margin-bottom: 40px; /* Giảm khoảng cách giữa các nhóm */
+}
+
+.group-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem; /* Tiêu đề nhóm nhỏ lại */
+  color: var(--wood-dark);
+  border-bottom: 2px solid var(--card-border-color); /* Gạch chân thay vì gạch dọc */
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+  display: inline-block;
+  font-weight: bold;
+}
+
+/* --- 6. GRID & CARDS (BÉ LẠI) --- */
+.card-grid {
+  display: grid;
+  /* 👇 QUAN TRỌNG: Giảm minmax từ 280px xuống 200px để ô nhỏ hơn */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px; /* Khoảng cách giữa các ô gần hơn (cũ là 30px) */
+}
+
+/* Card gốc */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* 👇 QUAN TRỌNG: Padding nhỏ hơn */
+  padding: 25px 15px; 
+  text-decoration: none;
+  border-radius: 6px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border-color);
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  box-shadow: var(--shadow-retro);
+  height:170px;
+}
+
+.card:hover {
+  transform: translate(-2px, -2px); /* Nảy lên nhẹ hơn */
+  box-shadow: 5px 5px 0px var(--wood-dark);
+  border-color: var(--wood-dark);
+}
+
+/* Icon trong card */
+.card .icon {
+  font-size: 2.2rem; /* 👇 Icon nhỏ lại (cũ là 3.5rem) */
+  margin-bottom: 12px;
+  color: var(--wood-dark);
+  opacity: 0.85;
+  transition: all 0.3s ease;
+}
+
+.card:hover .icon {
+  transform: scale(1.1);
+  color: var(--brown-accent);
+}
+
+.card span {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.1rem; /* 👇 Chữ nhỏ lại (cũ là 1.3rem) */
+  color: var(--text-ink);
+  text-align: center;
+}
+
+/* --- 7. RESPONSIVE --- */
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Trên mobile cho nhỏ nữa */
+  }
+}
+
