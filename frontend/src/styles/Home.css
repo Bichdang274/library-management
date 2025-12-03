@@ -1,0 +1,253 @@
+:root {
+    /* Màu nền chính (màu giấy cũ sáng) */
+    --vintage-bg-main: #f4f1ea;
+    /* Màu nền phụ (màu giấy cũ tối hơn một chút cho phần chi tiết) */
+    --vintage-bg-secondary: #e8e4d9;
+    /* Màu nâu đậm cho Header và các tiêu đề lớn */
+    --vintage-brown-dark: #4a3b2a;
+    /* Màu nâu vừa cho văn bản chính */
+    --vintage-brown-text: #5d4c3c;
+    /* Màu nâu nhạt cho đường viền */
+    --vintage-border: #c7bfad;
+    /* Màu điểm nhấn (ví dụ cho nút mượn sách - xanh rêu cổ điển) */
+    --vintage-accent-green: #6b8c42;
+    /* Màu khi hover */
+    --vintage-hover: #ede8dd;
+
+    /* Font chữ có chân tạo cảm giác cổ điển */
+    --vintage-font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+/* =========================================
+   GLOBAL RESET & BASE STYLES
+========================================= */
+body {
+    margin: 0;
+    font-family: var(--vintage-font-family);
+    background-color: var(--vintage-bg-main);
+    color: var(--vintage-brown-text);
+    background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.02));
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================
+   HEADER SECTION
+   Thanh tiêu đề màu nâu đậm trên cùng
+========================================= */
+.header {
+    background-color: var(--vintage-brown-dark);
+    color: var(--vintage-bg-main);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-bottom: 3px solid var(--vintage-border);
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.user-control {
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+}
+
+.btn-logout {
+    background-color: transparent;
+    border: 1px solid var(--vintage-bg-main);
+    color: var(--vintage-bg-main);
+    padding: 6px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--vintage-font-family);
+    transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+    background-color: var(--vintage-bg-main);
+    color: var(--vintage-brown-dark);
+}
+
+/* =========================================
+   CONTENT BODY
+========================================= */
+.content-body {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.section-title {
+    color: var(--vintage-brown-dark);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--vintage-border);
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    font-weight: normal;
+    font-size: 1.4rem;
+    text-shadow: none;
+}
+
+/* =========================================
+   TABLE STYLES
+   Phong cách bảng danh sách kiểu sổ sách cũ
+========================================= */
+.table-wrapper {
+    background-color: #fff; /* Nền trắng ngà cho khu vực bảng */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(151, 13, 13, 0.1); /* Đổ bóng màu nâu nhạt */
+    overflow: hidden;
+    border: 1px solid var(--vintage-border);
+}
+
+.book-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.book-table thead {
+    background-color: var(--vintage-bg-secondary);
+}
+
+.book-table th {
+    padding: 15px;
+    color: var(--vintage-brown-dark);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    border-bottom: 2px solid var(--vintage-border);
+}
+
+/* Style cho các dòng sách */
+.book-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid var(--vintage-border);
+}
+
+.book-row:hover {
+    background-color: var(--vintage-hover);
+}
+
+/* Dòng đang được mở rộng */
+.book-row.expanded {
+    background-color: var(--vintage-bg-secondary);
+    font-weight: bold;
+}
+
+.book-table td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    color: var(--vintage-brown-text);
+}
+
+.book-image {
+    border: 3px solid #fff !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    border-radius: 2px !important;
+}
+
+.arrow-icon {
+    text-align: center;
+    color: var(--vintage-brown-dark);
+    font-size: 0.8rem;
+}
+
+/* =========================================
+   DETAILS SECTION (Expanded)
+   Phần chi tiết mở rộng
+========================================= */
+.details-row td {
+    padding: 0;
+    border: none;
+}
+
+/* Wrapper cho hiệu ứng trượt */
+.details-wrapper {
+    transition: height 0.3s ease-in-out;
+}
+
+/* Nội dung chi tiết bên trong */
+.details-content {
+    /* !important để ghi đè backgroundColor inline trong file React */
+    background-color: var(--vintage-bg-secondary) !important;
+    padding: 25px 30px !important;
+    /* Tạo hiệu ứng như một tờ giấy khác đặt lên trên */
+    box-shadow: inset 0 3px 10px rgba(0,0,0,0.05);
+    border-bottom: 3px double var(--vintage-border) !important;
+}
+
+/* Tiêu đề "Giới thiệu nội dung" */
+.details-content h4 {
+    color: var(--vintage-brown-dark) !important;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    border-bottom: 1px dotted var(--vintage-brown-text);
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* Đoạn văn mô tả */
+.details-desc {
+    font-family: var(--vintage-font-family);
+    color: var(--vintage-brown-text) !important;
+    font-style: italic !important;
+    line-height: 1.7 !important;
+    font-size: 1.05rem;
+    background-color: transparent;
+}
+
+/* Badge Tồn kho */
+.details-content span[style*="backgroundColor"] {
+    /* Ghi đè style inline của badge tồn kho */
+    background-color: var(--vintage-border) !important;
+    color: var(--vintage-brown-dark);
+    border: 1px solid var(--vintage-brown-text);
+    box-shadow: 0 2px 2px rgba(0,0,0,0.05);
+}
+
+/* Nút Thêm vào giỏ sách */
+.btn-borrow {
+    /* Ghi đè style inline của nút */
+    background-color: var(--vintage-accent-green) !important;
+    color: white !important;
+    font-family: var(--vintage-font-family) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    transition: all 0.2s ease;
+}
+
+.btn-borrow:hover {
+    background-color: #5a7537 !important; /* Màu xanh rêu tối hơn khi hover */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Trạng thái đang tải */
+.loading-text {
+    text-align: center;
+    padding: 40px;
+    font-style: italic;
+    color: var(--vintage-brown-text);
+    font-size: 1.2rem;
+}
