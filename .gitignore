@@ -7,15 +7,22 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# --- Thư mục và File chính không cần push ---
+node_modules/
+dist/
+dist-ssr/
 *.local
 
-# Editor directories and files
-.vscode/*
+# --- Bổ sung cho Bảo mật và Backend ---
+.env
+.env.*
+server/node_modules/
+/temp/
+
+# --- Editor directories and files ---
+.vscode/
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
