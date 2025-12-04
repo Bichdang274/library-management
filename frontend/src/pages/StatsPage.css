@@ -1,0 +1,275 @@
+/* --- BIẾN MÀU (Đồng bộ với StatsPage) --- */
+:root {
+  --bg-main: #e6dfcf;        /* nền giấy */
+  --card-bg: #f5f1e8;        /* nền thẻ */
+  --text-main: #281912;      /* chữ nâu đen */
+  --accent-dark: #4e342e;    /* nâu gỗ */
+  --accent-border: #8d6e63;  /* viền nâu nhạt */
+  --table-stripe: #efebe9;   /* dòng chẵn bảng */
+  --danger-red: #c62828;     /* đỏ trầm */
+  --btn-primary: #2563eb;    /* xanh nút chính */
+  --btn-hover: #1d4ed8;
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Source Sans 3', sans-serif;
+}
+
+/* --- LAYOUT CHUNG --- */
+.readers-page {
+  background-color: var(--bg-main);
+  min-height: 100vh;
+  padding: 32px;
+  font-family: var(--font-body);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- HEADER --- */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--accent-dark);
+  padding-bottom: 15px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.header-title h2 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--accent-dark);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.header-title .subtitle {
+  font-family: var(--font-heading);
+  font-style: italic;
+  color: var(--accent-border);
+  font-size: 1rem;
+}
+
+.user-control {
+  font-family: var(--font-heading);
+  color: var(--text-main);
+}
+
+.btn-logout-small {
+  margin-left: 10px;
+  background: transparent;
+  border: 1px solid var(--accent-dark);
+  color: var(--accent-dark);
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  border-radius: 4px;
+}
+.btn-logout-small:hover {
+  background: var(--accent-dark);
+  color: #fff;
+}
+
+/* --- CONTENT LAYOUT --- */
+.readers-content {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 30px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+/* Card Style */
+.vintage-card {
+  background: var(--card-bg);
+  border: 1px solid var(--accent-border);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* --- FORM --- */
+.form-section h3 {
+  font-family: var(--font-heading);
+  margin-top: 0;
+  color: var(--accent-dark);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.vintage-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--accent-dark);
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid var(--accent-border);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  border-color: var(--accent-dark);
+  background: #fffcf5;
+  box-shadow: 2px 2px 0px rgba(93, 64, 55, 0.1);
+}
+
+/* Buttons Form */
+.form-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn-submit {
+  flex: 1;
+  padding: 10px;
+  background: var(--btn-primary);
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-submit:hover {
+  background: var(--btn-hover);
+}
+
+.btn-cancel {
+  padding: 10px 15px;
+  background: transparent;
+  border: 1px solid var(--accent-dark);
+  color: var(--accent-dark);
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 6px;
+}
+.btn-cancel:hover {
+  background: var(--table-stripe);
+}
+
+/* --- TABLE --- */
+.vintage-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.vintage-table thead tr {
+  background-color: var(--accent-dark);
+  color: #fff;
+}
+
+.vintage-table th {
+  padding: 12px 15px;
+  text-align: left;
+  font-family: var(--font-heading);
+  font-weight: normal;
+  letter-spacing: 0.5px;
+  border-bottom: 3px solid var(--accent-border);
+}
+
+.vintage-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--accent-border);
+  vertical-align: middle;
+}
+
+/* Zebra Striping */
+.vintage-table tbody tr:nth-child(even) {
+  background-color: var(--table-stripe);
+}
+
+.vintage-table tbody tr:hover {
+  background-color: #e0dbd5;
+}
+
+/* Cột ID và Tên */
+.id-col {
+  font-family: monospace;
+  color: var(--accent-border);
+  font-weight: bold;
+}
+
+.name-col {
+  font-weight: bold;
+  color: var(--accent-dark);
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+}
+
+/* Nút thao tác trong bảng */
+.action-col {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 30px;
+  height: 30px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon.edit {
+  color: var(--accent-dark);
+  border-color: var(--accent-border);
+}
+.btn-icon.edit:hover {
+  background: var(--accent-dark);
+  color: #fff;
+}
+
+.btn-icon.delete {
+  color: var(--danger-red);
+  border-color: #ef9a9a;
+}
+.btn-icon.delete:hover {
+  background: var(--danger-red);
+  color: #fff;
+}
+
+.empty-row {
+  text-align: center;
+  padding: 40px;
+  font-style: italic;
+  color: var(--accent-border);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+  .readers-content {
+    grid-template-columns: 1fr;
+  }
+  .form-section {
+    margin-bottom: 30px;
+  }
+}

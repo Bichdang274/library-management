@@ -1,0 +1,247 @@
+/* --- 1. IMPORT FONTS --- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap');
+
+/* --- 2. VARIABLES --- */
+:root {
+  --bg-main: #e6dfcf;
+  --bg-secondary: #d7ccc8;
+  --text-main: #281912;
+  --text-light: #ffffff;
+
+  --accent-dark: #4e342e;
+  --accent-brown: #795548;
+  --accent-border: #8d6e63;
+  --accent-card-bg: #f5f1e8;
+
+  --btn-primary: #2563eb;
+  --btn-hover: #1d4ed8;
+
+  --shadow-strong: 3px 3px 0px #3e2723;
+
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Source Sans 3', sans-serif;
+}
+
+/* --- 3. RESET & GLOBAL --- */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: var(--bg-main);
+  font-family: var(--font-body);
+  color: var(--text-main);
+}
+
+/* --- 4. TRANG KHUNG GIẤY --- */
+.page-frame {
+  min-height: 100vh;
+  border: 12px solid var(--accent-dark); /* khung viền nâu đậm */
+  padding: 20px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.25); /* shadow nhẹ cho khung */
+  background-color: var(--bg-main);
+}
+
+/* --- 5. HEADER & NAVBAR --- */
+.admin-header,
+.navbar {
+  display: none !important; /* Ẩn cả header và navbar */
+}
+
+/* --- 6. STATS PAGE --- */
+.stats-page {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--bg-main);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-align: center;
+  color: var(--accent-dark);
+}
+
+/* Export menu */
+.export-menu {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.export-button {
+  background-color: var(--accent-dark);
+  color: #fff;
+  padding: 8px 16px 8px 40px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+.export-button::before {
+  content: "⬇";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #fff;
+  transition: transform 0.2s ease;
+}
+
+.export-button:hover {
+  background-color: var(--accent-brown);
+}
+
+.export-button:hover::before {
+  transform: translateY(-50%) scale(1.2);
+}
+
+.export-options {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  background-color: var(--accent-card-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.export-options button {
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.export-options button:hover {
+  background-color: var(--bg-secondary);
+}
+
+/* --- 7. STATS CARDS --- */
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 40px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.stat-card {
+  flex: 1;
+  background-color: var(--accent-card-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow-strong);
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--accent-dark);
+}
+
+.stat-card p {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--text-main);
+}
+
+/* --- 8. CHARTS --- */
+.chart-box {
+  flex: 1;
+  background-color: var(--accent-card-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow-strong);
+  margin-bottom: 32px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.charts-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+/* --- 9. CARDS MENU --- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25px 15px;
+  border-radius: 6px;
+  background-color: var(--accent-card-bg);
+  border: 1px solid var(--accent-border);
+  box-shadow: var(--shadow-strong);
+  height: 170px;
+  text-decoration: none;
+}
+
+.card .icon {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+  color: var(--accent-dark);
+  opacity: 0.85;
+}
+
+.card span {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  text-align: center;
+}
+
+.card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px var(--accent-dark);
+  border-color: var(--accent-dark);
+}
+
+.card:hover .icon {
+  transform: scale(1.1);
+  color: var(--accent-brown);
+}
+
+/* --- 10. RESPONSIVE --- */
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}

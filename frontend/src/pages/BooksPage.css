@@ -1,0 +1,20 @@
+.books-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+.books-table th,
+.books-table td {
+  border: 1px solid #ddd;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.books-table th {
+  background-color: #eaeaea;
+}
+
+.books-table tr:hover {
+  background-color: #f9f9f9;
+}

@@ -1,0 +1,35 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #dc2626; /* đỏ tươi */
+  padding: 14px 28px;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar-logo {
+  font-size: 22px;       /* cỡ chữ lớn hơn */
+  font-weight: 700;      /* đậm */
+  letter-spacing: 1px;   /* giãn chữ nhẹ */
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 28px;             /* khoảng cách giữa các mục */
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links li a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;       /* cỡ chữ vừa phải */
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.navbar-links li a:hover {
+  color: #ffe4e4;        /* đỏ nhạt khi hover */
+}
