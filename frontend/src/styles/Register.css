@@ -1,0 +1,224 @@
+/* Register.css */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+/* 1. Container bao ngoài cùng, tạo background */
+.fullscreen-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    /* Sử dụng ảnh nền thư viện */
+    background-image: url('https://images.spiderum.com/sp-images/05188cf015ad11e7ae28b9f83783eb34.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+
+/* Lớp phủ mờ */
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* 2. Card chứa cả hai panel */
+.card-container {
+    z-index: 10;
+    display: flex;
+    max-width: 900px;
+    max-height: 550px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* 3. Panel bên trái (Hình ảnh/Thông điệp) */
+.image-panel {
+    width: 40%;
+    /* Sử dụng ảnh sách cho panel bên trái */
+    background-image: url('https://ghichu.vn/blog/wp-content/uploads/2018/11/a2-1.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    color: white;
+    text-align: center;
+    position: relative;
+}
+
+.image-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255, 196, 101, 0.381), rgba(0,0,0,0.7));
+  z-index: 1;
+}
+
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+.panel-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+    z-index: 2;
+}
+
+.panel-text {
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    z-index: 2;
+}
+
+.link-button {
+    padding: 10px 30px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid white;
+    transition: background-color 0.3s;
+    z-index: 2;
+}
+
+.link-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 4. Panel bên phải (Form) */
+.form-panel {
+    width: 50%;
+    background-color: white;
+    padding: 65px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-top-right-radius: 10px; 
+    border-bottom-right-radius: 10px;
+}
+
+.form-title {
+    text-align: left;
+    color: #5D4037; /* Màu nâu đồng bộ với ảnh đăng nhập */
+    font-size: 30px;
+    margin-bottom: 25px;
+    font-weight: normal;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    font-size: 14px;
+    color: #5D4037;
+    margin-bottom: 3px;
+    font-weight: 600;
+}
+
+.form-input {
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.form-button {
+    padding: 12px;
+    background-color: #5D4037;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 15px;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.form-button:hover {
+    background-color: #9c5c2d;
+}
+
+.arrow {
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    background: #ffe6e6;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.success-message {
+    color: green;
+    text-align: center;
+    background: #e6ffe6;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+/* Media Query cho màn hình nhỏ hơn */
+@media (max-width: 768px) {
+    .card-container {
+        flex-direction: column;
+        max-width: 90%;
+    }
+    .image-panel {
+        width: 100%;
+        min-height: 150px;
+        /* Giảm padding để tiết kiệm không gian */
+        padding: 20px; 
+    }
+    .form-panel {
+        width: 100%;
+        padding: 30px;
+    }
+    .logo {
+        position: static;
+        margin-bottom: 10px;
+    }
+    .panel-text {
+        display: none; /* Ẩn bớt text trên mobile */
+    }
+}

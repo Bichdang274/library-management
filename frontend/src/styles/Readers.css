@@ -1,0 +1,266 @@
+/* --- BIẾN MÀU (Đồng bộ với Management.css) --- */
+:root {
+    --paper-bg: #e6dfcf;       /* Nền giấy cũ */
+    --card-bg: #f5f1e8;        /* Nền thẻ sáng hơn chút */
+    --dark-brown: #3e2723;     /* Nâu đen (Text chính) */
+    --wood-brown: #5d4037;     /* Nâu gỗ (Header bảng) */
+    --accent-brown: #8d6e63;   /* Nâu nhạt (Viền) */
+    --gold-text: #ffecb3;      /* Màu chữ vàng nhạt cho header tối */
+    --table-stripe: #efebe9;   /* Màu dòng chẵn của bảng */
+    --danger-red: #c62828;     /* Đỏ trầm */
+}
+
+/* --- LAYOUT CHUNG --- */
+.readers-page {
+    /* Kế thừa background từ management-container nhưng thêm padding */
+    padding: 20px 40px;
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--dark-brown);
+}
+
+/* --- HEADER RIÊNG CỦA TRANG --- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--wood-brown);
+    padding-bottom: 15px;
+}
+
+.header-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--wood-brown);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.header-title .subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--accent-brown);
+    font-size: 1rem;
+}
+
+.user-control {
+    font-family: 'Playfair Display', serif;
+    color: var(--dark-brown);
+}
+
+.btn-logout-small {
+    margin-left: 10px;
+    background: transparent;
+    border: 1px solid var(--wood-brown);
+    color: var(--wood-brown);
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+.btn-logout-small:hover {
+    background: var(--wood-brown);
+    color: #fff;
+}
+
+/* --- CONTENT LAYOUT (FORM & TABLE) --- */
+.readers-content {
+    display: grid;
+    grid-template-columns: 350px 1fr; /* Form cố định 350px, Bảng chiếm phần còn lại */
+    gap: 30px;
+}
+
+/* Card Style Vintage (Dùng chung cho Form và Table wrapper) */
+.vintage-card {
+    background: var(--card-bg);
+    border: 1px solid var(--accent-brown);
+    padding: 20px;
+    box-shadow: 4px 4px 0px rgba(62, 39, 35, 0.2); /* Bóng cứng kiểu cũ */
+    position: relative;
+}
+
+/* --- FORM STYLING --- */
+.form-section h3 {
+    font-family: 'Playfair Display', serif;
+    margin-top: 0;
+    color: var(--wood-brown);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.vintage-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--wood-brown);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid var(--accent-brown);
+    color: var(--dark-brown);
+    font-family: 'Source Sans 3', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: var(--wood-brown);
+    background: #fffcf5; /* Hơi vàng khi focus */
+    box-shadow: 2px 2px 0px rgba(93, 64, 55, 0.1);
+}
+
+/* Buttons Form */
+.form-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-submit {
+    flex: 1;
+    padding: 10px;
+    background: var(--wood-brown);
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid var(--wood-brown);
+    transition: all 0.2s;
+}
+
+.btn-submit:hover {
+    background: var(--dark-brown);
+    transform: translateY(-2px);
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}
+
+.btn-cancel {
+    padding: 10px 15px;
+    background: transparent;
+    border: 1px solid var(--wood-brown);
+    color: var(--wood-brown);
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-cancel:hover {
+    background: #efebe9;
+}
+
+/* --- TABLE STYLING --- */
+.vintage-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.vintage-table thead tr {
+    background-color: var(--wood-brown);
+    color: var(--gold-text);
+}
+
+.vintage-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-family: 'Playfair Display', serif;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+    border-bottom: 3px solid var(--dark-brown);
+}
+
+.vintage-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #d7ccc8;
+    vertical-align: middle;
+}
+
+/* Zebra Striping (Dòng kẻ sọc) */
+.vintage-table tbody tr:nth-child(even) {
+    background-color: var(--table-stripe);
+}
+
+.vintage-table tbody tr:hover {
+    background-color: #e0dbd5; /* Highlight khi di chuột */
+}
+
+/* Cột ID và Tên */
+.id-col {
+    font-family: monospace;
+    color: var(--accent-brown);
+    font-weight: bold;
+}
+
+.name-col {
+    font-weight: bold;
+    color: var(--wood-brown);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+}
+
+/* Nút thao tác trong bảng */
+.action-col {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-icon {
+    width: 30px;
+    height: 30px;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon.edit {
+    color: var(--wood-brown);
+    border-color: var(--accent-brown);
+}
+.btn-icon.edit:hover {
+    background: var(--wood-brown);
+    color: #fff;
+}
+
+.btn-icon.delete {
+    color: var(--danger-red);
+    border-color: #ef9a9a;
+}
+.btn-icon.delete:hover {
+    background: var(--danger-red);
+    color: #fff;
+}
+
+.empty-row {
+    text-align: center;
+    padding: 40px;
+    font-style: italic;
+    color: var(--accent-brown);
+}
+
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+    .readers-content {
+        grid-template-columns: 1fr; /* Chuyển thành 1 cột trên màn nhỏ */
+    }
+    
+    .form-section {
+        margin-bottom: 30px;
+    }
+}
