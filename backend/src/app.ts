@@ -1,21 +1,61 @@
+import express, { Application } from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import path from 'path';
 
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
+// 1. Import kết nối DB và Routes mới từ nhánh HoangAnh
+import pool from './config/database';
+import bookRoutes from './routes/bookRoutes';
+import categoryRoutes from './routes/categoryRoutes';
+
+// 2. Import Routes Auth (Đăng nhập/Đăng ký) từ nhánh cũ
+// SỬA LỖI: Dùng require thay vì import để tránh lỗi "is not a module"
+// vì file api.ts/js cũ dùng module.exports
 const apiRoutes = require('./routes/api'); 
-require('dotenv').config();
 
-const app = express();
+dotenv.config();
 
+const app: Application = express();
+// Dùng port 3000 làm mặc định (hoặc 5000 tùy env)
+const port = process.env.PORT || 3000;
+
+// Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json()); // Thay thế cho bodyParser.json()
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/api', apiRoutes); 
-const PORT = process.env.PORT || 5000;
+// Cấu hình thư mục ảnh tĩnh (cho tính năng upload sách)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads'))); 
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    console.log(`Open http://localhost:${PORT}`);
+// --- GỘP ROUTES ---
+
+// 1. Route Auth (Giữ lại từ code cũ của bạn)
+// Các api như /api/login, /api/register sẽ chạy qua đây
+app.use('/api', apiRoutes);
+
+// 2. Route Sách & Thể loại (Thêm mới từ code Hoàng Anh)
+app.use('/api/books', bookRoutes);
+app.use('/api/categories', categoryRoutes);
+
+// Route kiểm tra server & DB
+app.get('/', async (req, res) => {
+    try {
+        const [rows] = await pool.query('SELECT 1 + 1 AS result');
+        res.json({ 
+            message: 'Server is running', 
+            status: 'success',
+            db_connection: rows 
+        });
+    } catch (error) {
+        console.error('Lỗi kết nối CSDL:', error);
+        res.status(500).json({ error: 'Database connection failed' });
+    }
 });
 
-module.exports = app;
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+    console.log(`API Auth: http://localhost:${port}/api`);
+    console.log(`API Books: http://localhost:${port}/api/books`);
+});
+
+export default app;

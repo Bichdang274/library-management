@@ -1,23 +1,35 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, AuthContext, AuthContextType } from './context/AuthContext'; // <-- Import AuthContextType
-import { useContext, ReactNode } from 'react'; // <-- Import ReactNode
-import React from 'react'; // Cần thiết khi dùng JSX trong TypeScript
+
+// --- SỬA LỖI Ở ĐÂY: Tách dòng import type riêng ---
+import { useContext } from 'react';
+import type { ReactNode } from 'react'; 
+import React from 'react';
+
+// Import Context
+import { AuthProvider, AuthContext } from './context/AuthContext';
+import type { AuthContextType } from './context/AuthContext';
+
+// Import các trang
 import Login from './pages/Login';
-import Readers from './pages/Readers';
+import Register from './pages/Register';
 import Home from './pages/Home';
 import Management from './pages/Management';
-import Register from './pages/Register';
+import BookList from './pages/Books/BookList';
+import CategoryList from './pages/Categories/CategoryList';
 
-// 1. Định nghĩa Interface cho PrivateRoute Props
+// Định nghĩa Interface
 interface PrivateRouteProps {
-    children: ReactNode; // <-- Khắc phục lỗi 7031
+    children: ReactNode;
 }
 
-// 2. Định kiểu cho component PrivateRoute
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
-    // 3. Định kiểu cho useContext
-    const { user, loading } = useContext(AuthContext) as AuthContextType;
+    const context = useContext(AuthContext);
     
+    // Kiểm tra an toàn
+    if (!context) return <div>Auth Context Error</div>;
+    
+    const { user, loading } = context as AuthContextType;
+
     if (loading) return <div>Loading...</div>;
     return user ? <>{children}</> : <Navigate to="/login" />;
 };
@@ -27,24 +39,25 @@ function App() {
         <AuthProvider>
             <Router>
                 <Routes>
+                    {/* Public Routes */}
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     
-                    {/* Các Route cần bảo vệ */}
-                    <Route path="/readers" element={
-                        <PrivateRoute>
-                            <Readers />
-                        </PrivateRoute>
+                    {/* Private Routes */}
+                    <Route path="/" element={
+                        <PrivateRoute><Home /></PrivateRoute>
                     } />
-                    <Route path="/Home" element={
-                        <PrivateRoute>
-                            <Home />
-                        </PrivateRoute>
+                    
+                    <Route path="/management" element={
+                        <PrivateRoute><Management /></PrivateRoute>
                     } />
-                    <Route path="/Management" element={
-                        <PrivateRoute>
-                            <Management />
-                        </PrivateRoute>
+
+                    <Route path="/books" element={
+                        <PrivateRoute><BookList /></PrivateRoute>
+                    } />
+
+                    <Route path="/categories" element={
+                        <PrivateRoute><CategoryList /></PrivateRoute>
                     } />
                     
                     <Route path="*" element={<Navigate to="/login" />} />
