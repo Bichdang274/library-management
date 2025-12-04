@@ -51,17 +51,21 @@ body {
 }
 
 .header h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: normal;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+font-family: 'Cinzel', serif;
+  color: #ffffff; 
+  text-transform: uppercase;
+  letter-spacing: 3px; 
+  text-shadow: 5px 2px 0px #e77b38;
 }
 
 .user-control {
     font-size: 0.95rem;
     display: flex;
     align-items: center;
+    color: #ffffff;
+}
+
+.user-control span {
     color: #ffffff;
 }
 
@@ -251,3 +255,4 @@ body {
     color: var(--vintage-brown-text);
     font-size: 1.2rem;
 }
+

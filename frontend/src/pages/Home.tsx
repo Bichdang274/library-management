@@ -1,32 +1,7 @@
-import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext, type AuthContextType } from '../context/AuthContext';
 import api from '../services/api';
 import '../styles/Home.css';
-
-
-const BOOK_METADATA: Record<number, { img: string; desc: string }> = {
-    1: {
-        img: "https://upload.wikimedia.org/wikipedia/en/d/de/Dune-Frank_Herbert_%281965%29_First_edition.jpg",
-        desc: "Dune là kiệt tác viễn tưởng về cuộc chiến giành quyền kiểm soát hành tinh sa mạc Arrakis. Câu chuyện pha trộn giữa chính trị, tôn giáo và sinh thái học."
-    },
-    2: {
-        img: "https://upload.wikimedia.org/wikipedia/en/6/6b/Harry_Potter_and_the_Philosopher%27s_Stone_Book_Cover.jpg",
-        desc: "Harry Potter, một cậu bé mồ côi, khám phá ra thân phận phù thủy của mình và bắt đầu năm học đầy phép thuật và nguy hiểm tại trường Hogwarts."
-    },
-    3: {
-        img: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1436202607i/3735293.jpg",
-        desc: "Clean Code (Mã Sạch) là cuốn sách gối đầu giường cho mọi lập trình viên. Robert C. Martin hướng dẫn cách viết code dễ đọc, dễ bảo trì và chuyên nghiệp."
-    },
-    4: {
-        img: "https://m.media-amazon.com/images/I/713jIoMO3UL.jpg",
-        desc: "Sapiens tóm lược lịch sử nhân loại từ thời kỳ đồ đá. Yuval Noah Harari giải thích cách loài người thống trị thế giới thông qua các cuộc cách mạng nhận thức."
-    },
-    5: {
-        img: "https://upload.wikimedia.org/wikipedia/en/4/4a/TheHobbit_FirstEdition.jpg",
-        desc: "Cuộc phiêu lưu của Bilbo Baggins - một người Hobbit thích an nhàn bị cuốn vào hành trình giành lại kho báu từ rồng Smaug cùng pháp sư Gandalf."
-    }
-};
-
 
 
 interface Book {
@@ -35,96 +10,30 @@ interface Book {
     author: string;
     publisher: string;
     year_published: number;
-    category_id: number | string;
     total_copies: number;
+    available_copies: number; // <--- Đã thêm trường này
     image_url?: string;
-    description?: string;
 }
-
-const BookItem: React.FC<{ book: Book; isExpanded: boolean; handleToggleDetails: (id: any) => void }> = ({ book, isExpanded, handleToggleDetails }) => {
-    const contentRef = useRef<HTMLDivElement>(null);
-    const [height, setHeight] = useState(0);
-
-    useEffect(() => {
-        if (contentRef.current) {
-            setHeight(isExpanded ? contentRef.current.scrollHeight : 0);
-        }
-    }, [isExpanded]);
-
-    return (
-        <React.Fragment>
-            <tr className={`book-row ${isExpanded ? 'expanded' : ''}`} onClick={() => handleToggleDetails(book.book_id)}>
-                <td>
-                    <img 
-                        src={book.image_url} 
-                        alt={book.name} 
-                        className="book-image"
-                        style={{width: '60px', height: '90px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #ddd'}} 
-                    />
-                </td>
-                <td style={{fontWeight: 'bold', color: '#333'}}>{book.name}</td>
-                <td>{book.author}</td>
-                <td>{book.publisher}</td>
-                <td>{book.year_published}</td>
-                <td className="arrow-icon">{isExpanded ? '▲' : '▼'}</td>
-            </tr>
-            <tr className="details-row">
-                <td colSpan={6} style={{padding: 0, border: 'none'}}>
-                    <div ref={contentRef} className="details-wrapper" style={{ height: `${height}px`, overflow: 'hidden', transition: 'height 0.3s ease' }}>
-                        <div className="details-content" style={{padding: '20px', backgroundColor: '#f8f9fa', borderBottom: '2px solid #e9ecef'}}>
-                            <h4 style={{marginTop: 0, color: '#2c3e50'}}>Giới thiệu nội dung:</h4>
-                            <p className="details-desc" style={{fontStyle: 'italic', color: '#555', lineHeight: '1.6'}}>
-                                {book.description}
-                            </p>
-                            <div style={{marginTop: '15px'}}>
-                                <span style={{backgroundColor: '#e2e6ea', padding: '5px 10px', borderRadius: '15px', fontSize: '0.85rem'}}>
-                                    📦 Tồn kho: <strong>{book.total_copies}</strong> cuốn
-                                </span>
-                            </div>
-                            <button className="btn-borrow" style={{marginTop: '15px', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold'}}>
-                                + Thêm vào giỏ sách
-                            </button>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </React.Fragment>
-    );
-};
 
 const Home: React.FC = () => {
     const { user, logout } = useContext(AuthContext) as AuthContextType;
     const [books, setBooks] = useState<Book[]>([]);
     const [loadingBooks, setLoadingBooks] = useState(true);
-    const [expandedBookId, setExpandedBookId] = useState<number | string | null>(null);
+    const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
-    const handleToggleDetails = useCallback((bookId: number | string) => {
-        setExpandedBookId(prevId => (prevId === bookId ? null : bookId));
-    }, []);
+    const DEFAULT_IMAGE = "https://via.placeholder.com/300x400?text=No+Image";
 
     const fetchBooks = async () => {
         try {
             const res = await api.get('/books');
             let realDataFromDB: Book[] = [];
-            
+            // Kiểm tra cấu trúc dữ liệu trả về từ API
             if (res.data && Array.isArray(res.data.data)) realDataFromDB = res.data.data;
             else if (Array.isArray(res.data)) realDataFromDB = res.data;
 
-
-            const mergedData = realDataFromDB.map(book => {
-                const id = Number(book.book_id); 
-                const meta = BOOK_METADATA[id];  
-                if (id === 3) console.log("Found Clean Code! Meta:", meta);
-                return {
-                    ...book,
-                    image_url: meta ? meta.img : 'https://via.placeholder.com/60x90?text=No+Img',
-                    description: meta ? meta.desc : `Mô tả cho sách "${book.name}" đang được cập nhật.`
-                };
-            });
-
-            setBooks(mergedData);
+            setBooks(realDataFromDB);
         } catch (error) {
-            console.error("Lỗi:", error);
+            console.error("Lỗi tải sách:", error);
         } finally {
             setLoadingBooks(false);
         }
@@ -134,40 +43,201 @@ const Home: React.FC = () => {
         fetchBooks();
     }, []);
 
+    // --- Styles ---
+    const styles = {
+        gridContainer: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+            gap: '25px',
+            padding: '20px 0'
+        },
+        bookCard: {
+            cursor: 'pointer',
+            transition: 'transform 0.2s, box-shadow 0.2s',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+            backgroundColor: '#fff',
+            height: '280px',
+            border: '1px solid #eee'
+        },
+        bookImage: {
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover' as const,
+            display: 'block'
+        },
+        modalOverlay: {
+            position: 'fixed' as const,
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000,
+            padding: '20px'
+        },
+        modalContent: {
+            backgroundColor: 'white',
+            borderRadius: '12px',
+            maxWidth: '700px',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row' as const,
+            overflow: 'hidden',
+            position: 'relative' as const,
+            boxShadow: '0 20px 25px rgba(0,0,0,0.2)'
+        },
+        modalImageSide: {
+            width: '40%',
+            backgroundColor: '#f8f9fa',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRight: '1px solid #eee'
+        },
+        modalInfoSide: {
+            width: '60%',
+            padding: '40px 30px',
+            display: 'flex',
+            flexDirection: 'column' as const,
+            justifyContent: 'center'
+        },
+        closeButton: {
+            position: 'absolute' as const,
+            top: '10px',
+            right: '15px',
+            fontSize: '30px',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: '#999',
+            zIndex: 10
+        },
+        infoRow: {
+            marginBottom: '15px',
+            fontSize: '16px',
+            color: '#333',
+            borderBottom: '1px dashed #eee',
+            paddingBottom: '8px'
+        },
+        label: {
+            fontWeight: 'bold',
+            color: '#555',
+            marginRight: '10px',
+            minWidth: '130px', // Tăng độ rộng nhãn một chút cho đẹp
+            display: 'inline-block'
+        }
+    };
+
     return (
         <div className="container">
             <div className="header">
-                <h2>📚 Thư viện Online</h2>
+                <h2>
+                     LIB 
+                </h2>
                 <div className="user-control">
-                    <span style={{marginRight: '15px'}}>Xin chào, <b>{user?.name}</b></span>
+                    <span style={{marginRight: '15px'}}> <b>{user?.name}</b></span>
                     <button onClick={logout} className="btn-logout">Đăng xuất</button>
                 </div>
             </div>
 
             <div className="content-body">
-                <h3 className="section-title">DANH MỤC SÁCH HIỆN CÓ</h3>
-                {loadingBooks ? <div style={{textAlign:'center'}}>Đang tải...</div> : (
-                    <div className="table-wrapper">
-                        <table className="book-table">
-                            <thead>
-                                <tr>
-                                    <th>Ảnh</th><th>Tên sách</th><th>Tác giả</th><th>NXB</th><th>Năm XB</th><th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {books.map(book => (
-                                    <BookItem 
-                                        key={book.book_id} 
-                                        book={book} 
-                                        isExpanded={expandedBookId === book.book_id} 
-                                        handleToggleDetails={handleToggleDetails} 
-                                    />
-                                ))}
-                            </tbody>
-                        </table>
+                <h3 className="section-title">DANH MỤC SÁCH</h3>
+                
+                {loadingBooks ? (
+                    <div style={{textAlign:'center', padding: '20px'}}>Đang tải dữ liệu...</div>
+                ) : (
+                    <div style={styles.gridContainer}>
+                        {books.map(book => (
+                            <div 
+                                key={book.book_id} 
+                                style={styles.bookCard}
+                                onClick={() => setSelectedBook(book)}
+                                title={book.name}
+                            >
+                                <img 
+                                    src={book.image_url || DEFAULT_IMAGE} 
+                                    alt={book.name} 
+                                    onError={(e) => {
+                                        (e.target as HTMLImageElement).src = DEFAULT_IMAGE;
+                                    }}
+                                    style={styles.bookImage}
+                                />
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>
+
+            {/* MODAL CHI TIẾT */}
+            {selectedBook && (
+                <div style={styles.modalOverlay} onClick={() => setSelectedBook(null)}>
+                    <div style={styles.modalContent} onClick={e => e.stopPropagation()}>
+                        <button style={styles.closeButton} onClick={() => setSelectedBook(null)}>&times;</button>
+                        
+                        <div style={styles.modalImageSide}>
+                             <img 
+                                src={selectedBook.image_url || DEFAULT_IMAGE} 
+                                alt={selectedBook.name} 
+                                style={{width: '100%', height: '100%', objectFit: 'contain', maxHeight: '400px'}}
+                            />
+                        </div>
+
+                        <div style={styles.modalInfoSide}>
+                            <h2 style={{marginTop: 0, color: '#2c3e50', marginBottom: '25px', lineHeight: '1.3'}}>
+                                {selectedBook.name}
+                            </h2>
+                            
+                            <div style={styles.infoRow}>
+                                <span style={styles.label}>Tác giả:</span> 
+                                {selectedBook.author}
+                            </div>
+                            
+                            <div style={styles.infoRow}>
+                                <span style={styles.label}>Nhà xuất bản:</span> 
+                                {selectedBook.publisher}
+                            </div>
+                            
+                            <div style={styles.infoRow}>
+                                <span style={styles.label}>Năm xuất bản:</span> 
+                                {selectedBook.year_published}
+                            </div>
+                            
+                            {/* 2. CẬP NHẬT HIỂN THỊ: Hiện available_copies */}
+                            <div style={{...styles.infoRow, borderBottom: 'none'}}>
+                                <span style={styles.label}>Sách còn trong kho:</span> 
+                                <span style={{
+                                    fontWeight: 'bold', 
+                                    // Logic màu: Nếu > 0 thì Xanh, bằng 0 thì Đỏ
+                                    color: selectedBook.available_copies > 0 ? '#28a745' : '#dc3545'
+                                }}>
+                                    {selectedBook.available_copies} cuốn
+                                </span>
+                            </div>
+
+                            <button 
+                                className="btn-borrow" 
+                                disabled={selectedBook.available_copies === 0} // Vô hiệu hóa nút nếu hết sách
+                                style={{
+                                    marginTop: 'auto', 
+                                    padding: '12px', 
+                                    // Đổi màu nút sang xám nếu hết sách
+                                    backgroundColor: selectedBook.available_copies > 0 ? '#007bff' : '#ccc', 
+                                    color: 'white', 
+                                    border: 'none', 
+                                    borderRadius: '6px', 
+                                    fontSize: '16px', 
+                                    cursor: selectedBook.available_copies > 0 ? 'pointer' : 'not-allowed', 
+                                    fontWeight: 'bold'
+                                }}
+                            >
+                                {selectedBook.available_copies > 0 ? 'Đăng ký mượn' : 'Hết sách'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

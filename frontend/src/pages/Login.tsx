@@ -2,7 +2,6 @@ import { useState, useContext, type FormEvent } from 'react';
 import { AuthContext, type AuthContextType } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import '../styles/Login.css';
-import myLogo from '../assets/logo.png'; 
 
 interface LoginFormState {
     email: string;
@@ -37,7 +36,6 @@ const Login = () => {
                 <div className="left-panel">
                     <div className="left-content">
                         <div className="brand">
-                            <img src={myLogo} alt="Logo thư viện" className="logo" />
                             <h3>Lib</h3>
                         </div>
                         
