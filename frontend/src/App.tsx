@@ -16,6 +16,7 @@ import Home from './pages/Home';
 import Management from './pages/Management';
 import BookList from './pages/Books/BookList';
 import CategoryList from './pages/Categories/CategoryList';
+import Readers from './pages/Readers';
 
 // Định nghĩa Interface
 interface PrivateRouteProps {
@@ -44,8 +45,12 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     
                     {/* Private Routes */}
-                    <Route path="/" element={
+                    <Route path="/home" element={
                         <PrivateRoute><Home /></PrivateRoute>
+                    } />
+                    
+                    <Route path="/readers" element={
+                        <PrivateRoute><Readers /></PrivateRoute>
                     } />
                     
                     <Route path="/management" element={

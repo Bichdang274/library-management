@@ -1,5 +1,5 @@
-import { useState, useContext, FormEvent } from 'react'; 
-import { AuthContext, AuthContextType } from '../context/AuthContext'; 
+import { useState, useContext, type FormEvent } from 'react'; 
+import { AuthContext, type AuthContextType } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import '../styles/Login.css';
 import myLogo from '../assets/logo.png'; 

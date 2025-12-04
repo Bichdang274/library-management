@@ -1,6 +1,6 @@
-import { useEffect, useState, useContext, FormEvent } from 'react';
+import { useEffect, useState, useContext, type FormEvent } from 'react';
 import api from '../services/api';
-import { AuthContext, AuthContextType } from '../context/AuthContext';
+import { AuthContext,type AuthContextType } from '../context/AuthContext';
 import '../styles/Readers.css';
 import React from 'react';
 

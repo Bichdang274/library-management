@@ -47,3 +47,18 @@ exports.login = async (req: Request, res: Response) => {
         response(res, 401, error.message || 'Đăng nhập thất bại');
     }
 };
+
+exports.getProfile = async (req: any, res: any) => {
+    try {
+        // req.user được tạo ra từ middleware verifyToken
+        if (!req.user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        // Trả về thông tin user
+        res.status(200).json({
+            data: req.user // Hoặc req.user đính kèm thông tin từ DB nếu cần
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi server', error });
+    }
+};

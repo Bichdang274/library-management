@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState,type ChangeEvent,type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 import React from 'react';

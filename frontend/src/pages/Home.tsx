@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
-import { AuthContext, AuthContextType } from '../context/AuthContext';
+import { AuthContext, type AuthContextType } from '../context/AuthContext';
 import api from '../services/api';
 import '../styles/Home.css';
 
