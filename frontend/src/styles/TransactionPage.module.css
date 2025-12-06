@@ -1,0 +1,225 @@
+/* TransactionPage.module.css */
+
+/* --- Cấu hình màu sắc (Theme Vintage) --- */
+:root {
+  --bg-color: #fdfbf7;        /* Màu nền kem sáng */
+  --primary-brown: #4e342e;   /* Màu nâu đậm (Header bảng, nút chính) */
+  --text-primary: #3e2723;    /* Màu chữ chính */
+  --border-color: #d7ccc8;    /* Màu viền nhạt */
+  --input-bg: #fff;           /* Nền ô nhập liệu */
+  --accent-gold: #ffecb3;     /* Màu nhấn nhẹ */
+  --danger-red: #d32f2f;      /* Màu đỏ cho nút xóa/hủy */
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-color); /* Nền toàn trang màu kem */
+  font-family: 'Times New Roman', serif; /* Font chữ kiểu cổ điển/trang trọng */
+  color: var(--text-primary);
+}
+
+/* --- Sidebar bên trái (Menu chọn chức năng) --- */
+.sidebar {
+  width: 250px;
+  background-color: #f4eee0;
+  border-right: 1px solid var(--border-color);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sidebarTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--primary-brown);
+  border-bottom: 2px solid var(--primary-brown);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.menuButton {
+  background: transparent;
+  border: 1px solid var(--primary-brown);
+  color: var(--primary-brown);
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menuButton:hover {
+  background-color: #efebe9;
+}
+
+.menuButton.active {
+  background-color: var(--primary-brown);
+  color: white;
+  box-shadow: 0 4px 6px rgba(78, 52, 46, 0.3);
+}
+
+/* --- Nội dung chính bên phải --- */
+.mainContent {
+  flex: 1;
+  padding: 40px;
+}
+
+.pageHeader {
+  margin-bottom: 30px;
+}
+
+.headerTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-brown);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.headerSubtitle {
+  font-style: italic;
+  color: #795548;
+  margin-top: 5px;
+}
+
+/* --- Card chứa Form (Giống ảnh 1) --- */
+.cardForm {
+  background-color: #fff8e1; /* Màu nền vàng rất nhạt */
+  border: 1px solid var(--primary-brown);
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto; /* Căn giữa */
+  box-shadow: 5px 5px 0px rgba(78, 52, 46, 0.1);
+}
+
+.cardTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px dashed var(--primary-brown);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  color: var(--primary-brown);
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--primary-brown);
+  font-size: 0.9rem;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 0; /* Vuông vức theo phong cách cổ điển */
+  background-color: #fff;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-brown);
+  background-color: #fff;
+}
+
+.btnSubmit {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-brown);
+  color: white;
+  border: none;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: opacity 0.3s;
+}
+
+.btnSubmit:hover {
+  opacity: 0.9;
+}
+
+/* --- Bảng Danh Sách (Giống ảnh 2) --- */
+.tableContainer {
+  background-color: white;
+  border: 1px solid var(--border-color);
+  padding: 5px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  background-color: var(--primary-brown);
+  color: white;
+  padding: 15px;
+  text-align: left;
+  font-weight: normal;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.table td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  color: #4e342e;
+}
+
+.table tr:hover {
+  background-color: #fbe9e7;
+}
+
+.statusTag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.overdue {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.borrowed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.btnAction {
+  background-color: white;
+  border: 1px solid var(--primary-brown);
+  color: var(--primary-brown);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.btnAction:hover {
+  background-color: var(--primary-brown);
+  color: white;
+}

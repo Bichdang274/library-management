@@ -1,6 +1,10 @@
-const mysql = require('mysql2');
-require('dotenv').config();
+import mysql from 'mysql2';
+import dotenv from 'dotenv';
 
+// Kích hoạt biến môi trường
+dotenv.config();
+
+// Tạo kết nối
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -11,4 +15,5 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-module.exports = pool.promise();
+// Xuất pool ra ngoài (Không gọi .promise() ở đây để bên route tự gọi)
+export default pool;
