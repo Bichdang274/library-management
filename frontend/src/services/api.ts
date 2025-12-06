@@ -2,14 +2,13 @@ import axios from 'axios';
 
 // 1. Cấu hình Axios
 const api = axios.create({
-    // QUAN TRỌNG: Dùng port 3000 để khớp với Backend hiện tại
-    baseURL: 'http://localhost:5000/api',
+    baseURL: 'http://localhost:3000/api',
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-console.log("Current API URL:", 'http://localhost:5000/api');
+console.log("Current API URL:", 'http://localhost:3000/api');
 // 2. Giữ lại Interceptor (Middleware) để tự động gửi Token đăng nhập
 // Nếu thiếu đoạn này, dù đăng nhập rồi nhưng server vẫn sẽ báo lỗi "Unauthorized"
 api.interceptors.request.use((config) => {

@@ -16,7 +16,6 @@ const apiRoutes = require('./routes/api');
 dotenv.config();
 
 const app: Application = express();
-// Dùng port 3000 làm mặc định (hoặc 5000 tùy env)
 const port = process.env.PORT || 3000;
 
 // Middleware
@@ -29,11 +28,11 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // --- GỘP ROUTES ---
 
-// 1. Route Auth (Giữ lại từ code cũ của bạn)
+// 1. Route Auth
 // Các api như /api/login, /api/register sẽ chạy qua đây
 app.use('/api', apiRoutes);
 
-// 2. Route Sách & Thể loại (Thêm mới từ code Hoàng Anh)
+// 2. Route Sách & Thể loại 
 app.use('/api/books', bookRoutes);
 app.use('/api/categories', categoryRoutes);
 

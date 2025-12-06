@@ -1,6 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
-// --- SỬA LỖI Ở ĐÂY: Tách dòng import type riêng ---
 import { useContext } from 'react';
 import type { ReactNode } from 'react'; 
 import React from 'react';
