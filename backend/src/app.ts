@@ -14,7 +14,7 @@ import categoryRoutes from './routes/categoryRoutes';
 import borrowRoutes from './routes/borrowRoutes';     
 import statsRoutes from './routes/statsRoutes';       
 import readerRoutes from './routes/readerRoutes';       // Thêm Route Độc giả
-
+import book1Routes from './routes/book1Routes';
 dotenv.config();
 
 const app: Application = express();
@@ -26,20 +26,20 @@ app.use(express.urlencoded({ extended: true }));
 
 // Logger
 if (process.env.NODE_ENV !== 'production') {
-    app.use(morgan('dev'));
+ app.use(morgan('dev'));
 }
 
 // Static folder (để hiển thị ảnh bìa sách)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // --- Routes Mounting (Gắn API vào đường dẫn) ---
-app.use('/api/auth', authRoutes);         
-app.use('/api/books', bookRoutes);        
+app.use('/api/auth', authRoutes); 
+app.use('/api/books', bookRoutes); 
 app.use('/api/categories', categoryRoutes); 
-app.use('/api/borrows', borrowRoutes);    
-app.use('/api/stats', statsRoutes);       
+app.use('/api/transactions', borrowRoutes);
+app.use('/api/stats', statsRoutes); 
 app.use('/api/readers', readerRoutes);      // Gắn Route Độc giả
-
+app.use('/api/books1', book1Routes);
 // --- Health Check ---
 app.get('/', async (req: Request, res: Response) => {
     try {

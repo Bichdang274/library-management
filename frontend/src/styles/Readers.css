@@ -13,7 +13,7 @@
 /* --- LAYOUT CHUNG --- */
 .readers-page {
     /* Kế thừa background từ management-container nhưng thêm padding */
-    padding: 20px 40px;
+    padding: 50px 40px;
     font-family: 'Source Sans 3', sans-serif;
     color: var(--dark-brown);
 }

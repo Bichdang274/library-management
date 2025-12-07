@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
+// frontend/src/pages/Books/BookForm.tsx
+import React, { useEffect, useState } from 'react';
 import { getCategories } from '../../services/categoryService';
 import { createBook, updateBook } from '../../services/bookService';
 import type { Category, Book } from '../../types';
@@ -18,12 +19,9 @@ const BookForm: React.FC<Props> = ({ onSuccess, initialData, onCancel }) => {
         publisher: '',
         year_published: new Date().getFullYear(),
         category_id: 0,
-        total_copies: 1
+        total_copies: 1,
+        image_url: '' 
     });
-
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null); // Để hiện ảnh preview
-    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         getCategories().then(setCategories).catch(console.error);
@@ -37,15 +35,9 @@ const BookForm: React.FC<Props> = ({ onSuccess, initialData, onCancel }) => {
                 publisher: initialData.publisher || '',
                 year_published: initialData.year_published || new Date().getFullYear(),
                 category_id: initialData.category_id,
-                total_copies: initialData.total_copies
+                total_copies: initialData.total_copies,
+                image_url: initialData.image_url || ''
             });
-            // Nếu sách đang sửa có ảnh, hiển thị ảnh đó
-            if (initialData.image_url) {
-                setPreviewUrl(`http://localhost:5000${initialData.image_url}`);
-            } else {
-                setPreviewUrl(null);
-            }
-            setSelectedFile(null);
         } else {
             resetForm();
         }
@@ -58,47 +50,24 @@ const BookForm: React.FC<Props> = ({ onSuccess, initialData, onCancel }) => {
             publisher: '',
             year_published: new Date().getFullYear(),
             category_id: 0,
-            total_copies: 1
+            total_copies: 1,
+            image_url: ''
         });
-        setSelectedFile(null);
-        setPreviewUrl(null);
-        if (fileInputRef.current) fileInputRef.current.value = '';
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            setSelectedFile(file);
-            // Tạo URL ảo để preview ảnh ngay lập tức
-            setPreviewUrl(URL.createObjectURL(file));
-        }
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const data = new FormData();
-            data.append('name', formData.name);
-            data.append('author', formData.author);
-            data.append('publisher', formData.publisher);
-            data.append('year_published', formData.year_published.toString());
-            data.append('category_id', formData.category_id.toString());
-            data.append('total_copies', formData.total_copies.toString());
-            
-            if (selectedFile) {
-                data.append('image', selectedFile);
-            }
-
             if (initialData) {
-                await updateBook(initialData.book_id, data);
+                await updateBook(initialData.book_id, formData);
                 alert('Cập nhật thành công!');
                 onCancel();
             } else {
-                await createBook(data);
+                await createBook(formData);
                 alert('Thêm mới thành công!');
                 resetForm();
             }
@@ -109,7 +78,6 @@ const BookForm: React.FC<Props> = ({ onSuccess, initialData, onCancel }) => {
         }
     };
 
-    // Style chung cho input để thẳng hàng
     const inputStyle = {
         width: '100%', 
         padding: '10px', 
@@ -125,57 +93,43 @@ const BookForm: React.FC<Props> = ({ onSuccess, initialData, onCancel }) => {
                     {initialData ? 'CẬP NHẬT SÁCH' : '+ THÊM SÁCH MỚI'}
                 </h3>
                 {initialData && (
-                    <button onClick={onCancel} className="btn-cancel">
-                        HỦY BỎ
-                    </button>
+                    <button onClick={onCancel} className="btn-cancel">HỦY BỎ</button>
                 )}
             </div>
             
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                
-                {/* Tên Sách */}
                 <div>
                     <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Tên sách *</label>
                     <input required name="name" value={formData.name} onChange={handleChange} style={inputStyle} />
                 </div>
 
-                {/* Ảnh Bìa (Custom UI) */}
                 <div>
-                    <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Ảnh bìa</label>
+                    <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Link Ảnh bìa (URL)</label>
                     <input 
-                        type="file" 
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        ref={fileInputRef}
-                        style={{ display: 'none' }} 
-                        id="file-upload"
+                        type="text" 
+                        name="image_url" 
+                        placeholder="VD: https://i.imgur.com/abc.jpg"
+                        value={formData.image_url} 
+                        onChange={handleChange} 
+                        style={inputStyle} 
                     />
-                    <label htmlFor="file-upload" style={{ 
-                        display: 'flex', 
-                        flexDirection: 'column',
-                        alignItems: 'center', 
-                        justifyContent: 'center',
-                        border: '1px dashed #8D6E63', 
-                        padding: '10px', 
-                        cursor: 'pointer',
-                        borderRadius: '4px',
-                        backgroundColor: '#FFF'
-                    }}>
-                        {previewUrl ? (
-                            <img src={previewUrl} alt="Preview" style={{ height: '100px', objectFit: 'cover' }} />
-                        ) : (
-                            <span style={{ color: '#888' }}>+ Bấm để chọn ảnh</span>
-                        )}
-                    </label>
+                    {formData.image_url && (
+                        <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                            <img 
+                                src={formData.image_url} 
+                                alt="Preview" 
+                                style={{ height: '150px', objectFit: 'contain', border: '1px solid #ccc' }} 
+                                onError={(e) => (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150?text=Lỗi+Link'}
+                            />
+                        </div>
+                    )}
                 </div>
 
-                {/* Tác giả */}
                 <div>
                     <label style={{ fontSize: '14px', display: 'block', marginBottom: '5px' }}>Tác giả</label>
                     <input name="author" value={formData.author} onChange={handleChange} style={inputStyle} />
                 </div>
 
-                {/* Thể loại */}
                 <div>
                     <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Thể loại *</label>
                     <select required name="category_id" value={formData.category_id} onChange={handleChange} style={{...inputStyle, backgroundColor: '#fff'}}>
@@ -186,7 +140,6 @@ const BookForm: React.FC<Props> = ({ onSuccess, initialData, onCancel }) => {
                     </select>
                 </div>
 
-                {/* Nhà xuất bản & Năm */}
                 <div style={{ display: 'flex', gap: '15px' }}>
                     <div style={{ flex: 2 }}>
                         <label style={{ fontSize: '14px', display: 'block', marginBottom: '5px' }}>Nhà xuất bản</label>
@@ -194,24 +147,15 @@ const BookForm: React.FC<Props> = ({ onSuccess, initialData, onCancel }) => {
                     </div>
                     <div style={{ flex: 1 }}>
                         <label style={{ fontSize: '14px', display: 'block', marginBottom: '5px' }}>Năm</label>
-                        <input 
-                            type="number" 
-                            name="year_published" 
-                            max={new Date().getFullYear()}
-                            value={formData.year_published} 
-                            onChange={handleChange} 
-                            style={inputStyle} 
-                        />
+                        <input type="number" name="year_published" max={new Date().getFullYear()} value={formData.year_published} onChange={handleChange} style={inputStyle} />
                     </div>
                 </div>
 
-                {/* Số lượng */}
                 <div>
                     <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Tổng số lượng</label>
                     <input type="number" min="1" name="total_copies" value={formData.total_copies} onChange={handleChange} style={inputStyle} />
                 </div>
 
-                {/* Nút Submit */}
                 <button type="submit" className="btn-submit">
                     {initialData ? 'LƯU THAY ĐỔI' : 'LƯU THÔNG TIN'}
                 </button>

@@ -1,79 +1,115 @@
+// backend/src/controllers/bookController.ts
 import { Request, Response } from 'express';
-import * as bookService from '../services/bookService';
+import pool from '../config/db';
+import { RowDataPacket } from 'mysql2';
 
+// --- 1. LẤY DANH SÁCH ---
 export const getBooks = async (req: Request, res: Response) => {
     try {
-        const keyword = req.query.search as string || '';
-        const categoryId = Number(req.query.category) || 0;
+        const { search, category_id } = req.query;
+        
+        let sql = `
+            SELECT b.*, c.category_name 
+            FROM books b
+            LEFT JOIN categories c ON b.category_id = c.category_id
+            WHERE 1=1
+        `;
+        const params: any[] = [];
 
-        const books = await bookService.getAllBooks(keyword, categoryId);
-        res.status(200).json(books);
+        if (search) {
+            sql += ` AND (b.name LIKE ? OR b.author LIKE ?)`;
+            params.push(`%${search}%`, `%${search}%`);
+        }
+
+        if (category_id && Number(category_id) > 0) {
+            sql += ` AND b.category_id = ?`;
+            params.push(category_id);
+        }
+
+        sql += ` ORDER BY b.book_id DESC`;
+
+        const [rows] = await pool.query<RowDataPacket[]>(sql, params);
+        res.json(rows);
     } catch (error: any) {
-        console.error("Get Books Error:", error);
-        res.status(500).json({ message: 'Lỗi server khi lấy danh sách sách' });
+        res.status(500).json({ message: 'Lỗi server', error: error.message });
     }
 };
 
+// --- 2. LẤY CHI TIẾT ---
 export const getBookById = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
-        const book = await bookService.getBookById(id);
-        res.status(200).json(book);
+        const { id } = req.params;
+        const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM books WHERE book_id = ?', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Không tìm thấy sách' });
+        res.json(rows[0]);
     } catch (error: any) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: 'Lỗi server', error: error.message });
     }
 };
 
+// --- 3. TẠO SÁCH MỚI (Lưu URL ảnh) ---
 export const createBook = async (req: Request, res: Response) => {
     try {
-        const bookData = req.body;
-        
-        // Xử lý ảnh upload từ Multer
-        if (req.file) {
-            // Lưu đường dẫn tương đối để frontend dễ truy cập
-            bookData.image_url = `/uploads/${req.file.filename}`;
-        }
+        // Nhận image_url từ body
+        const { name, author, publisher, year_published, category_id, total_copies, image_url } = req.body;
 
-        const newBookId = await bookService.createBook(bookData);
-        res.status(201).json({ 
-            success: true, 
-            message: 'Thêm sách thành công', 
-            bookId: newBookId 
-        });
+        // available_copies mặc định bằng total_copies
+        const available_copies = total_copies;
+
+        const sql = `
+            INSERT INTO books 
+            (name, author, publisher, year_published, category_id, total_copies, available_copies, image_url)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        
+        await pool.query(sql, [
+            name, author, publisher, year_published, category_id, total_copies, available_copies, 
+            image_url || null // Nếu không nhập thì lưu NULL
+        ]);
+
+        res.status(201).json({ message: 'Thêm sách thành công' });
     } catch (error: any) {
         console.error("Create Book Error:", error);
-        res.status(500).json({ message: error.message || 'Lỗi khi thêm sách' });
+        res.status(500).json({ message: 'Lỗi khi thêm sách', error: error.message });
     }
 };
 
+// --- 4. CẬP NHẬT SÁCH ---
 export const updateBook = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
-        const bookData = req.body;
+        const { id } = req.params;
+        const { name, author, publisher, year_published, category_id, total_copies, image_url } = req.body;
+        
+        const sql = `
+            UPDATE books 
+            SET name=?, author=?, publisher=?, year_published=?, category_id=?, total_copies=?, image_url=?
+            WHERE book_id=?
+        `;
 
-        if (req.file) {
-            bookData.image_url = `/uploads/${req.file.filename}`;
-        }
+        await pool.query(sql, [
+            name, author, publisher, year_published, category_id, total_copies, 
+            image_url || null, // Cập nhật link ảnh mới
+            id
+        ]);
 
-        await bookService.updateBook(id, bookData);
-        res.json({ success: true, message: 'Cập nhật thành công' });
+        res.json({ message: 'Cập nhật sách thành công' });
+
     } catch (error: any) {
         console.error("Update Book Error:", error);
-        res.status(500).json({ message: error.message || 'Lỗi khi cập nhật sách' });
+        res.status(500).json({ message: 'Lỗi khi cập nhật sách', error: error.message });
     }
 };
 
+// --- 5. XÓA SÁCH ---
 export const deleteBook = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
-        await bookService.deleteBook(id);
-        res.json({ success: true, message: 'Xóa thành công' });
+        const { id } = req.params;
+        await pool.query('DELETE FROM books WHERE book_id = ?', [id]);
+        res.json({ message: 'Đã xóa sách thành công' });
     } catch (error: any) {
-        console.error("Delete Book Error:", error);
-        // Lỗi Foreign Key (đang có người mượn)
         if (error.code === 'ER_ROW_IS_REFERENCED_2') {
-            return res.status(400).json({ message: 'Không thể xóa: Sách này đang có người mượn hoặc có dữ liệu liên quan.' });
+            return res.status(400).json({ message: 'Không thể xóa sách này vì đang có người mượn.' });
         }
-        res.status(500).json({ message: 'Lỗi server khi xóa sách' });
+        res.status(500).json({ message: 'Lỗi server', error: error.message });
     }
 };

@@ -1,22 +1,28 @@
+// backend/src/routes/borrowRoutes.ts
 import { Router } from 'express';
 import * as borrowController from '../controllers/borrowController';
-import { verifyToken, verifyAdmin } from '../middleware/authMiddleware';
 
 const router = Router();
 
-// --- KHU VỰC ADMIN ---
-// Xem tất cả danh sách mượn trả
-router.get('/all', verifyAdmin, borrowController.getAll);
+// Lấy danh sách đang mượn
+// URL: /api/transactions/active
+router.get('/active', borrowController.getActiveLoans);
 
-// Xác nhận trả sách (Admin bấm nút "Đã trả")
-router.put('/:id/return', verifyAdmin, borrowController.returnBook);
+// Tạo phiếu mượn
+// URL: /api/transactions/borrow
+router.post('/borrow', borrowController.borrowBook);
+
+// Trả sách
+// URL: /api/transactions/return
+router.post('/return', borrowController.returnBook);
 
 
-// --- KHU VỰC USER (ĐỘC GIẢ) ---
-// Xem lịch sử mượn của bản thân
-router.get('/my-history', verifyToken, borrowController.getMyHistory);
 
-// Đăng ký mượn sách
-router.post('/', verifyToken, borrowController.createBorrow);
+// API cho Admin quản lý
+router.get('/active', borrowController.getActiveLoans);
+router.post('/return', borrowController.returnBook);
 
+// API cho Sinh viên (Frontend Home)
+router.post('/checkout', borrowController.borrowCart);       // Mượn giỏ sách
+router.get('/history/:readerId', borrowController.getHistoryByReader);
 export default router;

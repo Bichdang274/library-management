@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import type { Book, Category } from '../../types';
 import { getBooks, deleteBook } from '../../services/bookService';
 import { getCategories } from '../../services/categoryService';
-import BookForm from './BookForm';
+
+// SỬA LẠI DÒNG NÀY: Dùng ./BookForm vì file đã nằm cùng thư mục
+import BookForm from './BookForm'; 
 
 const BookList: React.FC = () => {
     const [books, setBooks] = useState<Book[]>([]);
@@ -70,14 +72,9 @@ const BookList: React.FC = () => {
                         <option key={c.category_id} value={c.category_id}>{c.category_name}</option>
                     ))}
                 </select>
-                {/* Nút Xóa Lọc đã sửa style */}
                 <button 
                     onClick={() => { setSearchKeyword(''); setFilterCategory(0); }}
-                    style={{ 
-                        padding: '10px 20px', cursor: 'pointer', 
-                        border: 'none', borderRadius: '20px',
-                        backgroundColor: '#5D4037', color: '#fff' 
-                    }}
+                    style={{ padding: '10px 20px', cursor: 'pointer', border: 'none', borderRadius: '20px', backgroundColor: '#5D4037', color: '#fff' }}
                 >
                     Xóa lọc
                 </button>
@@ -102,19 +99,20 @@ const BookList: React.FC = () => {
                                     <th style={{ padding: '10px', textAlign: 'left' }}>Thể loại</th>
                                     <th style={{ padding: '10px', textAlign: 'center' }}>Năm</th>
                                     <th style={{ padding: '10px', textAlign: 'center' }}>Kho</th>
-                                    {/* Đổi tiêu đề cột thao tác */}
                                     <th style={{ padding: '10px', textAlign: 'center' }}>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {books.map((book) => (
+                                {books.map((book: any) => (
                                     <tr key={book.book_id} style={{ borderBottom: '1px solid #D7CCC8' }}>
                                         <td style={{ padding: '10px' }}>
+                                            {/* HIỂN THỊ ẢNH TỪ URL */}
                                             {book.image_url ? (
                                                 <img 
-                                                    src={`http://localhost:5000${book.image_url}`} 
+                                                    src={book.image_url} 
                                                     alt="Cover" 
                                                     style={{ width: '50px', height: '70px', objectFit: 'cover', border: '1px solid #ddd' }}
+                                                    onError={(e) => (e.target as HTMLImageElement).src = 'https://via.placeholder.com/50x70?text=No+Img'}
                                                 />
                                             ) : (
                                                 <div style={{ width: '50px', height: '70px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px' }}>No Img</div>
@@ -132,7 +130,6 @@ const BookList: React.FC = () => {
                                             </span>
                                         </td>
                                         <td style={{ padding: '10px', textAlign: 'center' }}>
-                                            {/* Nút bấm mới: Sửa / Xóa */}
                                             <button className="btn-action-edit" onClick={() => setEditingBook(book)}>Sửa</button>
                                             <button className="btn-action-delete" onClick={() => handleDelete(book.book_id)}>Xóa</button>
                                         </td>
