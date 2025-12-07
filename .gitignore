@@ -1,0 +1,15 @@
+# Loại bỏ node_modules
+node_modules/
+
+# Loại bỏ thư mục build
+dist/
+
+# Loại bỏ file cache TypeScript
+*.tsbuildinfo
+
+# Loại bỏ file log
+*.log
+
+# Loại bỏ file hệ thống
+.DS_Store
+Thumbs.db
