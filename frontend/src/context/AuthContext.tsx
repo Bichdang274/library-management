@@ -1,17 +1,18 @@
 import { createContext, useState, useEffect, type ReactNode } from 'react';
 import api from '../services/api';
 
-interface User {
-    id: string;
+// 1. Định nghĩa lại Interface User cho chuẩn
+export interface User {
+    id: number | string;
     email: string;
-    name: string; 
-    username?: string; 
-    role?: 'reader' | 'manager'| 'admin'; 
+    name: string;
+    role: 'admin' | 'reader'; // Chỉ định rõ 2 role này
 }
 
 export interface AuthContextType {
-    user: User | null; 
+    user: User | null;
     loading: boolean;
+    // Hàm login trả về User hoặc undefined (nếu lỗi)
     login: (email: string, password: string) => Promise<User | undefined>;
     logout: () => void;
 }
@@ -19,29 +20,21 @@ export interface AuthContextType {
 const defaultAuthContextValue: AuthContextType = {
     user: null,
     loading: true,
-    login: async () => undefined, 
-    logout: () => {}, 
+    login: async () => undefined,
+    logout: () => {},
 };
 
 export const AuthContext = createContext<AuthContextType>(defaultAuthContextValue);
 
-interface AuthProviderProps {
-    children: ReactNode;
-}
-
-export const AuthProvider = ({ children }: AuthProviderProps) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            // FIX 1: Đổi thành /auth/profile để khớp với Backend
-            api.get('/auth/profile') 
-                .then(res => {
-                    // Sửa 2: Backend trả về user luôn, không cần .data.data
-                    setUser(res.data as User); 
-                })
+            api.get('/auth/profile')
+                .then(res => setUser(res.data.user || res.data)) // Handle tùy response backend
                 .catch(() => {
                     localStorage.removeItem('token');
                     setUser(null);
@@ -54,28 +47,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     const login = async (email: string, password: string): Promise<User | undefined> => {
         try {
-            // FIX 2: Đổi '/login' thành '/auth/login' để khớp với Backend
             const res = await api.post('/auth/login', { email, password });
             
-            // Sửa 4: Lấy dữ liệu trực tiếp từ res.data
-            const data = res.data; 
-            const token = data.token;
-            
-            // Tạo object user từ response
-            const userData: User = {
-                id: data.id || data.user?.id, 
-                name: data.name || data.user?.name,
-                email: data.email || data.user?.email,
-                role: data.role || data.user?.role
-            };
+            // Backend trả về: { success: true, token: "...", user: { ... } }
+            const { token, user } = res.data;
 
-            if (token) {
+            if (token && user) {
                 localStorage.setItem('token', token);
-                setUser(userData);
-                return userData;
+                setUser(user); // Lưu vào state
+                return user;   // Trả về user để Login page sử dụng ngay
             }
         } catch (error) {
-            console.error("Login failed:", error);
             throw error;
         }
         return undefined;

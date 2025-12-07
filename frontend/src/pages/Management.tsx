@@ -6,7 +6,6 @@ import qlbdImg from '../assets/qlbd.png';  // Quản lý bạn đọc
 import qlsImg from '../assets/qls.png';    // Quản lý sách
 import qltlImg from '../assets/qltl.png';  // Quản lý thể loại
 import tpmImg from '../assets/tpm.png';    // Tạo phiếu mượn
-import xltsImg from '../assets/xlts.png';  // Xử lý trả sách
 import bdttImg from '../assets/bdtt.png';  // Biểu đồ tăng trưởng
 import dtqImg from '../assets/dtq.png';    // Dashboard tổng quan
 
@@ -63,12 +62,7 @@ const Management = () => {
           <div className="card-grid">
             <Link to="/transactionPage" className="card card-green">
               <div className="icon"><img src={tpmImg} alt="Mượn sách" className="card-icon" /></div>
-              <span>Tạo Phiếu Mượn</span>
-            </Link>
-
-            <Link to="/return" className="card card-green">
-              <div className="icon"><img src={xltsImg} alt="Trả sách" className="card-icon" /></div>
-              <span>Xử lý Trả sách</span>
+              <span>Quản lý mượn-trả</span>
             </Link>
           </div>
         </section>
@@ -82,7 +76,7 @@ const Management = () => {
               <span>Dashboard Tổng quan</span>
             </Link>
 
-            <Link to="statsPage" className="card card-purple">
+            <Link to="/statsPage" className="card card-purple">
               <div className="icon"><img src={bdttImg} alt="Tăng trưởng" className="card-icon" /></div>
               <span>Biểu đồ Tăng trưởng</span>
             </Link>
