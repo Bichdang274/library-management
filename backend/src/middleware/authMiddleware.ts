@@ -1,35 +1,48 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import dotenv from 'dotenv';
 
-// Khai báo type mở rộng cho Request để có thể gắn user
-export interface AuthRequest extends Request {
-  user?: JwtPayload | string | any;
+dotenv.config();
+
+// Định nghĩa lại cấu trúc User trong Token
+interface UserPayload extends JwtPayload {
+    id: number;
+    role: string;
+    name: string;
 }
 
-// Middleware xác thực JWT
-export const auth = (req: AuthRequest, res: Response, next: NextFunction): void => {
-  const header = req.headers.authorization;
-  if (!header || !header.startsWith("Bearer ")) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
-  }
+export interface AuthRequest extends Request {
+    user?: UserPayload;
+}
 
-  const token = header.split(" ")[1];
+// 1. Middleware xác thực đăng nhập
+export const verifyToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
+    const header = req.headers.authorization;
+    if (!header || !header.startsWith("Bearer ")) {
+        res.status(401).json({ message: "Bạn chưa đăng nhập (Thiếu Token)" });
+        return;
+    }
 
-  try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET as string);
-    req.user = payload;
-    next();
-  } catch (err) {
-    res.status(401).json({ message: "Invalid token" });
-  }
+    const token = header.split(" ")[1];
+
+    try {
+        if (!process.env.JWT_SECRET) throw new Error("Chưa cấu hình JWT_SECRET");
+        
+        const payload = jwt.verify(token, process.env.JWT_SECRET) as UserPayload;
+        req.user = payload;
+        next();
+    } catch (err) {
+        res.status(403).json({ message: "Token không hợp lệ hoặc đã hết hạn" });
+    }
 };
 
-// Middleware chỉ cho admin
-export const adminOnly = (req: AuthRequest, res: Response, next: NextFunction): void => {
-  if (!req.user || (req.user as any).role !== "admin") {
-    res.status(403).json({ message: "Forbidden" });
-    return;
-  }
-  next();
+// 2. Middleware chỉ cho phép Admin
+export const verifyAdmin = (req: AuthRequest, res: Response, next: NextFunction): void => {
+    verifyToken(req, res, () => {
+        if (req.user && (req.user.role === "admin" || req.user.role === "manager")) {
+            next();
+        } else {
+            res.status(403).json({ message: "Quyền truy cập bị từ chối (Yêu cầu Admin)" });
+        }
+    });
 };

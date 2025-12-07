@@ -1,68 +1,59 @@
-import pool from '../config/db';
-import { Book } from '../models/Book';
+import BookModel from '../models/bookModel';
 
-
-export const getAllBooks = async (keyword: string = '', categoryId: number = 0): Promise<Book[]> => {
-    let sql = `
-        SELECT b.*, c.category_name 
-        FROM books b 
-        LEFT JOIN categories c ON b.category_id = c.category_id 
-        WHERE 1=1
-    `;
-    
-    const params: any[] = [];
-
-    // Lọc theo tên sách hoặc tác giả
-    if (keyword) {
-        sql += ` AND (b.name LIKE ? OR b.author LIKE ?)`;
-        params.push(`%${keyword}%`, `%${keyword}%`);
-    }
-
-    // Lọc theo thể loại
-    if (categoryId > 0) {
-        sql += ` AND b.category_id = ?`;
-        params.push(categoryId);
-    }
-
-    sql += ` ORDER BY b.book_id DESC`;
-
-    const [rows] = await pool.query<Book[]>(sql, params);
-    return rows;
+// Lấy danh sách sách (có hỗ trợ tìm kiếm và lọc danh mục)
+export const getAllBooks = async (keyword: string, categoryId: number) => {
+    // Gọi hàm getAll từ Model, Model sẽ lo việc tạo câu SQL lọc
+    return await BookModel.getAll(keyword, categoryId);
 };
 
-
-export const createBook = async (bookData: any): Promise<number> => {
-    const { name, author, publisher, year_published, category_id, total_copies, image_url } = bookData;
-    // Logic: Khi tạo mới, số lượng khả dụng (available) = tổng số lượng (total)
-    const [result] = await pool.query(
-        `INSERT INTO books (name, author, publisher, year_published, category_id, total_copies, available_copies)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [name, author, publisher, year_published, category_id, total_copies, total_copies]
-    );
-    
-    return (result as any).insertId;
+// Lấy chi tiết 1 cuốn sách (Thêm hàm này vì Controller cần dùng)
+export const getBookById = async (id: number) => {
+    const book = await BookModel.getById(id);
+    if (!book) {
+        throw new Error('Sách không tồn tại');
+    }
+    return book;
 };
 
-
-export const updateBook = async (id: number, bookData: any): Promise<void> => {
-    const { name, author, publisher, year_published, category_id, total_copies, image_url } = bookData;
-    
-    // Logic cập nhật ảnh: Nếu có ảnh mới (image_url khác null) thì cập nhật, nếu không thì giữ nguyên ảnh cũ
-    let sql = `UPDATE books SET name=?, author=?, publisher=?, year_published=?, category_id=?, total_copies=?, available_copies=?`;
-    const params = [name, author, publisher, year_published, category_id, total_copies, total_copies];
-
-    if (image_url) {
-        sql += `, image_url=?`;
-        params.push(image_url);
+// Thêm sách mới
+export const createBook = async (bookData: any) => {
+    // Validate dữ liệu cơ bản (Business Logic)
+    if (!bookData.name || !bookData.category_id) {
+        throw new Error('Tên sách và danh mục là bắt buộc');
     }
 
-    sql += ` WHERE book_id=?`;
-    params.push(id);
+    // Logic nghiệp vụ: Khi tạo mới, số lượng khả dụng = tổng số lượng
+    // Ta gán thêm trường available_copies vào data trước khi gửi sang Model
+    const dataToSave = {
+        ...bookData,
+        available_copies: bookData.total_copies // Logic cũ của bạn
+    };
 
-    await pool.query(sql, params);
+    // Gọi Model để lưu vào DB
+    return await BookModel.create(dataToSave);
 };
 
+// Cập nhật sách
+export const updateBook = async (id: number, bookData: any) => {
+    // Bước 1: Kiểm tra xem sách có tồn tại không
+    const existingBook = await BookModel.getById(id);
+    if (!existingBook) {
+        throw new Error('Không tìm thấy sách để cập nhật');
+    }
 
-export const deleteBook = async (id: number): Promise<void> => {
-    await pool.query('DELETE FROM books WHERE book_id = ?', [id]);
+    // Bước 2: Gọi Model để update
+    // Model đã có logic: chỉ update các trường có dữ liệu, và tự xử lý logic ảnh
+    return await BookModel.update(id, bookData);
+};
+
+// Xóa sách
+export const deleteBook = async (id: number) => {
+    // Bước 1: Kiểm tra tồn tại
+    const existingBook = await BookModel.getById(id);
+    if (!existingBook) {
+        throw new Error('Sách không tồn tại');
+    }
+
+    // Bước 2: Gọi Model để xóa
+    return await BookModel.delete(id);
 };

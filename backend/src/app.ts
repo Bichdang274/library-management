@@ -1,78 +1,76 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express'; // Thêm NextFunction
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
-import morgan from 'morgan'; // Logger từ nhánh mới
+import morgan from 'morgan';
 
-// 1. Database & Config
-import pool from './config/db'; // Giữ kết nối MySQL của bạn
+// 1. Config Database
+import pool from './config/db';
 
-// 2. Import Routes
+// 2. Import Routes (Giữ nguyên các routes đã fix)
+import authRoutes from './routes/authRoutes';
 import bookRoutes from './routes/bookRoutes';
-import categoryRoutes from './routes/categoryRoutes'; // Của nhánh cũ
-import borrowRoutes from './routes/borrowRoutes';     // Tính năng mới
-import statsRoutes from './routes/statsRoutes';       // Tính năng mới
-
-// 3. Import Routes Auth (Legacy - CommonJS)
-// Chúng ta giữ nguyên require để tránh lỗi module
-const apiRoutes = require('./routes/api');
+import categoryRoutes from './routes/categoryRoutes'; 
+import borrowRoutes from './routes/borrowRoutes';     
+import statsRoutes from './routes/statsRoutes';       
+import readerRoutes from './routes/readerRoutes';       // Thêm Route Độc giả
 
 dotenv.config();
 
 const app: Application = express();
-const port = process.env.PORT || 5000;
 
-// --- Middleware ---
+// --- Middleware Cấu hình chung ---
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Logger (Chỉ hiện khi không phải production)
+// Logger
 if (process.env.NODE_ENV !== 'production') {
-    app.use(morgan('dev'));
+    app.use(morgan('dev'));
 }
 
-// Cấu hình thư mục ảnh tĩnh (cho tính năng upload sách)
+// Static folder (để hiển thị ảnh bìa sách)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// --- Routes Definition ---
-
-// 1. Route Auth (Login/Register)
-app.use('/api', apiRoutes);
-
-// 2. Các Route chính
-app.use('/api/books', bookRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/borrows', borrowRoutes); // Gộp thêm route mượn trả
-app.use('/api/stats', statsRoutes);    // Gộp thêm route thống kê
+// --- Routes Mounting (Gắn API vào đường dẫn) ---
+app.use('/api/auth', authRoutes);         
+app.use('/api/books', bookRoutes);        
+app.use('/api/categories', categoryRoutes); 
+app.use('/api/borrows', borrowRoutes);    
+app.use('/api/stats', statsRoutes);       
+app.use('/api/readers', readerRoutes);      // Gắn Route Độc giả
 
 // --- Health Check ---
-// Kiểm tra cả server lẫn kết nối Database
 app.get('/', async (req: Request, res: Response) => {
-    try {
-        const [rows] = await pool.query('SELECT 1 + 1 AS result');
-        res.json({
-            message: 'Server is running',
-            status: 'success',
-            db_connection: 'connected',
-            test_query: rows
-        });
-    } catch (error) {
-        console.error('Lỗi kết nối CSDL:', error);
-        res.status(500).json({ error: 'Database connection failed' });
-    }
+    try {
+        const [rows] = await pool.query('SELECT 1 + 1 AS result');
+        res.json({ 
+            status: 'success', 
+            message: 'Library API is ready 🚀', 
+            db_connection: 'connected' 
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Database connection failed' });
+    }
 });
 
-// Xử lý 404 (Route không tồn tại)
+// --- GLOBAL ERROR HANDLER (Xử lý lỗi 500) ---
+// Phải đặt sau tất cả các routes để bắt lỗi (err) từ tầng service/controller
+const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+    console.error('LỖI SERVER KHÔNG XÁC ĐỊNH:', err.stack);
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).json({
+        message: err.message || 'Lỗi hệ thống không xác định (Internal Server Error).',
+        // Chỉ hiển thị stack trace khi ở môi trường phát triển (development)
+        error: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+    });
+};
+app.use(globalErrorHandler);
+
+// --- 404 Handler (Phải đặt sau Global Error Handler) ---
 app.use((req: Request, res: Response) => {
-    res.status(404).json({ message: 'API Route Not Found' });
+    res.status(404).json({ message: 'API Route not found' });
 });
 
-// --- Start Server ---
-app.listen(port, () => {
-    console.log(`🚀 Server is running on port ${port}`);
-    console.log(`   - Auth: http://localhost:${port}/api`);
-    console.log(`   - Books: http://localhost:${port}/api/books`);
-});
 
 export default app;

@@ -1,24 +1,23 @@
-import type { Pool, RowDataPacket } from 'mysql2/promise'; // Import Pool và RowDataPacket
+import { RowDataPacket } from 'mysql2/promise';
 import db from '../config/db';
 
-
-interface Manager extends RowDataPacket { // Nên extend RowDataPacket
-    id: number;
+// Interface cho kết quả trả về từ DB
+interface Manager extends RowDataPacket {
+    manager_id: number;
     email: string;
     password_hash: string;
-    name?: string;
+    name: string;
 }
 
 class ManagerModel {
     static async findByEmail(email: string): Promise<Manager | undefined> { 
         const sql = `SELECT * FROM managers WHERE email = ?`;
         
-        // Bây giờ TypeScript hiểu db.query chấp nhận kiểu generic
         const [rows] = await db.query<Manager[]>(sql, [email]); 
         
-        // Khai báo rõ ràng hơn về kiểu trả về nếu cần thiết, 
-        // nhưng dòng trên đã đủ để giải quyết lỗi TS2347
         return rows[0];
     }
 }
-module.exports = ManagerModel;
+
+// SỬA: Dùng export default thay vì module.exports
+export default ManagerModel;

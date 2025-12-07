@@ -1,7 +1,10 @@
-import type { Request, Response } from 'express'; 
-const ReaderModel = require('../models/readerModel');
-const bcrypt = require('bcryptjs'); 
+import { Request, Response } from 'express';
+// FIX LỖI 1192: Dùng Default Import
+import readerService from '../services/readerService'; 
+import { AuthRequest } from '../middleware/authMiddleware'; 
 
+
+// Khai báo type của data nhận từ body
 interface CreateReaderBody {
     name: string;
     email: string;
@@ -11,9 +14,11 @@ interface CreateReaderBody {
     address?: string;
 }
 
-exports.getReaders = async (req: Request, res: Response) => {
+// 1. Lấy danh sách độc giả
+export const getReadersHandler = async (req: Request, res: Response) => {
     try {
-        const readers = await ReaderModel.getAll(); 
+        // GỌI HÀM: Dùng đối tượng readerService.getReaders()
+        const readers = await readerService.getReaders(); 
         res.status(200).json({ data: readers });
     } catch (err: unknown) { 
         if (err instanceof Error) {
@@ -24,56 +29,57 @@ exports.getReaders = async (req: Request, res: Response) => {
 };
 
 
-exports.createReader = async (req: Request<{}, {}, CreateReaderBody>, res: Response) => {
+// 2. Tạo độc giả mới
+export const createReaderHandler = async (req: Request<{}, {}, CreateReaderBody>, res: Response) => {
     try {
-        const { name, email, password, quota, phone_number, address } = req.body;
+        const { name, email, password } = req.body;
+        
         if (!name || !email || !password) {
             return res.status(400).json({ message: "Thiếu tên, email hoặc mật khẩu!" });
         }
-        const salt: string = await bcrypt.genSalt(10);
-        const passwordHash: string = await bcrypt.hash(password, salt);
-        const newId: number = await ReaderModel.create({
-            name, email, phone_number, address,
-            password_hash: passwordHash,
-            quota: quota
-        });
+        
+        // Tạo đối tượng dữ liệu và cam kết password là string sau khi validation
+        const creationData = {
+            ...req.body,
+            password: password as string, 
+        };
+
+        // GỌI HÀM: Dùng đối tượng readerService.createReader()
+        const newId: number = await readerService.createReader(creationData as any); 
 
         return res.status(201).json({ message: "Tạo thành công", readerId: newId });
-    } catch (error: unknown) {
-        console.error(error);
-        if (typeof error === 'object' && error !== null && 'code' in error && error.code === 'ER_DUP_ENTRY') {
-             return res.status(400).json({ message: "Email đã tồn tại" });
+    } catch (error: any) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).json({ message: "Email đã tồn tại" });
         }
-        if (error instanceof Error) {
-             return res.status(500).json({ message: error.message });
-        }
-        return res.status(500).json({ message: "Lỗi không xác định khi tạo reader" });
+        return res.status(500).json({ message: error.message || "Lỗi server khi tạo reader" });
     }
 };
 
 
-exports.updateReader = async (req: Request<{ id: string }, {}, Partial<CreateReaderBody>>, res: Response) => {
+// 3. Cập nhật độc giả
+export const updateReaderHandler = async (req: Request<{ id: string }, {}, Partial<CreateReaderBody>>, res: Response) => {
     try {
         const readerId: string = req.params.id;
-        await ReaderModel.update(readerId, req.body); 
+        // GỌI HÀM: Dùng đối tượng readerService.updateReader()
+        await readerService.updateReader(readerId, req.body); 
         
         res.status(200).json({ message: 'Cập nhật thành công' });
-    } catch (err: unknown) {
-        if (err instanceof Error) {
-            return res.status(500).json({ message: err.message });
-        }
-        res.status(500).json({ message: "Lỗi không xác định khi cập nhật" });
+    } catch (err: any) {
+        res.status(500).json({ message: err.message || "Lỗi server khi cập nhật" });
     }
 };
 
-exports.deleteReader = async (req: Request<{ id: string }>, res: Response) => {
+// 4. Xóa độc giả
+export const deleteReaderHandler = async (req: Request<{ id: string }>, res: Response) => {
     try {
-        await ReaderModel.delete(req.params.id);
+        // GỌI HÀM: Dùng đối tượng readerService.deleteReader()
+        await readerService.deleteReader(req.params.id); 
         res.status(200).json({ message: 'Xóa thành công' });
-    } catch (err: unknown) {
-        if (err instanceof Error) {
-            return res.status(500).json({ message: err.message });
+    } catch (err: any) {
+        if (err.code === 'ER_ROW_IS_REFERENCED_2') {
+            return res.status(400).json({ message: "Không thể xóa: Độc giả này còn dữ liệu liên quan." });
         }
-        res.status(500).json({ message: "Lỗi không xác định khi xóa" });
+        res.status(500).json({ message: err.message || "Lỗi server khi xóa" });
     }
 };
