@@ -51,16 +51,16 @@ export default function GenreChart() {
     ],
   };
 
-  const options = {
+const options = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
         labels: {
           font: {
-            family: 'Poppins, sans-serif',
+            family: "'Poppins', sans-serif",
             size: 12,
-            weight: '600',
+            weight: 600, // 👉 Sửa: Bỏ dấu nháy đơn, dùng số
           },
         },
         position: 'right' as const,
@@ -69,17 +69,17 @@ export default function GenreChart() {
         display: true,
         text: 'Phân bổ thể loại sách',
         font: {
-          family: 'Poppins, sans-serif',
+          family: "'Poppins', sans-serif",
           size: 16,
-          weight: '700',
+          weight: 700, // 👉 Sửa: Bỏ dấu nháy đơn
         },
       },
       datalabels: {
         color: '#000',
         font: {
-          family: 'Poppins, sans-serif',
+          family: "'Poppins', sans-serif",
           size: 11,
-          weight: '500',
+          weight: 500, // 👉 Sửa: Bỏ dấu nháy đơn
         },
         formatter: (value: number) => {
           const percentage = (value / total) * 100;
@@ -98,7 +98,6 @@ export default function GenreChart() {
       },
     },
   };
-
   return (
     <div style={{ width: '350px', height: '250px' }}>
       <Pie data={data} options={options} />

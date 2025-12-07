@@ -112,7 +112,7 @@ const BookList: React.FC = () => {
                                         <td style={{ padding: '10px' }}>
                                             {book.image_url ? (
                                                 <img 
-                                                    src={`http://localhost:3000${book.image_url}`} 
+                                                    src={`http://localhost:5000${book.image_url}`} 
                                                     alt="Cover" 
                                                     style={{ width: '50px', height: '70px', objectFit: 'cover', border: '1px solid #ddd' }}
                                                 />

@@ -1,8 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-// QUAN TRỌNG: Phải có dòng này để áp dụng giao diện đẹp của nhánh HoangAnh
-import './index.css' 
+
 
 const rootElement = document.getElementById('root')
 

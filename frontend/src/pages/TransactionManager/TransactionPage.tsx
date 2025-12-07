@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import styles from '../styles/TransactionPage.module.css';
+import styles from "../../styles/TransactionPage.module.css";
+
 
 // 1. Định nghĩa kiểu dữ liệu cho Phiếu Mượn (Loan)
 interface Loan {

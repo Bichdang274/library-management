@@ -56,7 +56,7 @@ export default function BorrowChart() {
     ],
   };
 
-  const options = {
+const options = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -69,7 +69,8 @@ export default function BorrowChart() {
         font: {
           family: 'Poppins, sans-serif',
           size: 16,
-          weight: '700',
+          // 👇 SỬA Ở ĐÂY: Bỏ dấu nháy đơn, chuyển thành số
+          weight: 700, 
         },
       },
     },
@@ -89,7 +90,6 @@ export default function BorrowChart() {
       },
     },
   };
-
   return (
     <div style={{ width: '600px', height: '300px' }}>
       <Line data={data} options={options} />

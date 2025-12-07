@@ -41,7 +41,7 @@ const BookForm: React.FC<Props> = ({ onSuccess, initialData, onCancel }) => {
             });
             // Nếu sách đang sửa có ảnh, hiển thị ảnh đó
             if (initialData.image_url) {
-                setPreviewUrl(`http://localhost:3000${initialData.image_url}`);
+                setPreviewUrl(`http://localhost:5000${initialData.image_url}`);
             } else {
                 setPreviewUrl(null);
             }

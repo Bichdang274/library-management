@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import BorrowChart from '../components/BorrowChart';
 import GenreChart from '../components/GenreChart';
 import axios from 'axios';
-import './StatsPage.css';
+import './StatsCard.css';
 
 export default function StatsPage() {
   const [open, setOpen] = useState(false);

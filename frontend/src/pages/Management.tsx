@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import  { useContext } from 'react';
+import { Link} from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import '../styles/Management.css'; 
-import logoImg from '../assets/logo.png';
 import qlbdImg from '../assets/qlbd.png';  // Quản lý bạn đọc
 import qlsImg from '../assets/qls.png';    // Quản lý sách
 import qltlImg from '../assets/qltl.png';  // Quản lý thể loại
@@ -12,7 +11,6 @@ import bdttImg from '../assets/bdtt.png';  // Biểu đồ tăng trưởng
 import dtqImg from '../assets/dtq.png';    // Dashboard tổng quan
 
 const Management = () => {
-  const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
 
   // Hàm đăng xuất
@@ -63,7 +61,7 @@ const Management = () => {
         <section className="menu-group">
           <h2 className="group-title"> Nghiệp Vụ</h2>
           <div className="card-grid">
-            <Link to="/borrow" className="card card-green">
+            <Link to="/transactionPage" className="card card-green">
               <div className="icon"><img src={tpmImg} alt="Mượn sách" className="card-icon" /></div>
               <span>Tạo Phiếu Mượn</span>
             </Link>
@@ -79,12 +77,12 @@ const Management = () => {
         <section className="menu-group">
           <h2 className="group-title"> Báo Cáo & Thống Kê</h2>
           <div className="card-grid">
-            <Link to="/admin/dashboard" className="card card-purple">
+            <Link to="/Stats" className="card card-purple">
               <div className="icon"><img src={dtqImg} alt="Tổng quan" className="card-icon" /></div>
               <span>Dashboard Tổng quan</span>
             </Link>
 
-            <Link to="/admin/stats" className="card card-purple">
+            <Link to="statsPage" className="card card-purple">
               <div className="icon"><img src={bdttImg} alt="Tăng trưởng" className="card-icon" /></div>
               <span>Biểu đồ Tăng trưởng</span>
             </Link>
