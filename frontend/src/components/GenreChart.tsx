@@ -10,7 +10,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-// Đăng ký đầy đủ plugin cần thiết
+
 ChartJS.register(ArcElement, Tooltip, Legend, Title, ChartDataLabels);
 
 export default function GenreChart() {
@@ -20,15 +20,15 @@ export default function GenreChart() {
   useEffect(() => {
     axios.get('http://localhost:5000/api/stats/borrows-by-genre')
       .then(res => {
-        console.log("📊 API trả về:", res.data);
+        console.log("API trả về:", res.data);
         const data = res.data.data || [];
 
-        // ✅ Sửa lại key từ category_name → genre
+        
         setRawData(data.map((item: any) => item.total));
         setLabels(data.map((item: any) => item.genre));
       })
       .catch(err => {
-        console.error("❌ Lỗi lấy dữ liệu biểu đồ:", err);
+        console.error("Lỗi lấy dữ liệu biểu đồ:", err);
       });
   }, []);
 
@@ -60,7 +60,7 @@ const options = {
           font: {
             family: "'Poppins', sans-serif",
             size: 12,
-            weight: 600, // 👉 Sửa: Bỏ dấu nháy đơn, dùng số
+            weight: 600, 
           },
         },
         position: 'right' as const,
@@ -71,7 +71,7 @@ const options = {
         font: {
           family: "'Poppins', sans-serif",
           size: 16,
-          weight: 700, // 👉 Sửa: Bỏ dấu nháy đơn
+          weight: 700, 
         },
       },
       datalabels: {
@@ -79,7 +79,7 @@ const options = {
         font: {
           family: "'Poppins', sans-serif",
           size: 11,
-          weight: 500, // 👉 Sửa: Bỏ dấu nháy đơn
+          weight: 500, 
         },
         formatter: (value: number) => {
           const percentage = (value / total) * 100;

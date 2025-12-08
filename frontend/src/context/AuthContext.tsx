@@ -1,18 +1,18 @@
 import { createContext, useState, useEffect, type ReactNode } from 'react';
 import api from '../services/api';
 
-// 1. Định nghĩa lại Interface User cho chuẩn
+
 export interface User {
     id: number | string;
     email: string;
     name: string;
-    role: 'admin' | 'reader'; // Chỉ định rõ 2 role này
+    role: 'admin' | 'reader'; 
 }
 
 export interface AuthContextType {
     user: User | null;
     loading: boolean;
-    // Hàm login trả về User hoặc undefined (nếu lỗi)
+    
     login: (email: string, password: string) => Promise<User | undefined>;
     logout: () => void;
 }
@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const token = localStorage.getItem('token');
         if (token) {
             api.get('/auth/profile')
-                .then(res => setUser(res.data.user || res.data)) // Handle tùy response backend
+                .then(res => setUser(res.data.user || res.data)) 
                 .catch(() => {
                     localStorage.removeItem('token');
                     setUser(null);
@@ -49,13 +49,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
             const res = await api.post('/auth/login', { email, password });
             
-            // Backend trả về: { success: true, token: "...", user: { ... } }
+            
             const { token, user } = res.data;
 
             if (token && user) {
                 localStorage.setItem('token', token);
-                setUser(user); // Lưu vào state
-                return user;   // Trả về user để Login page sử dụng ngay
+                setUser(user); 
+                return user;   
             }
         } catch (error) {
             throw error;

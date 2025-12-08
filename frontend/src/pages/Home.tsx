@@ -2,10 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext, type AuthContextType } from '../context/AuthContext';
 import api from '../services/api';
 import '../styles/Home.css';
-// Lưu ý: Cần đảm bảo file '../styles/Home.css' có định nghĩa các styles cho Top Lists 
-// (như .charts-row, .chart-box, .top-list, .highlight, v.v.)
 
-// --- Interface ---
 interface Book {
     book_id: number;
     name: string;
@@ -27,7 +24,6 @@ interface Transaction {
     status: 'BORROWED' | 'RETURNED' | 'OVERDUE';
 }
 
-// BỔ SUNG: Interfaces cho Top Lists (được lấy từ API thống kê)
 interface TopBook { title: string; borrow_count: number; }
 interface TopReader { reader: string; borrow_count: number; }
 
@@ -37,24 +33,24 @@ const Home: React.FC = () => {
     const [books, setBooks] = useState<Book[]>([]);
     const [loadingBooks, setLoadingBooks] = useState(true);
     
-    // State cho Modal chi tiết sách
+
     const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
-    // State cho Giỏ Sách (Cart)
+
     const [cart, setCart] = useState<Book[]>([]);
     const [showCart, setShowCart] = useState(false);
 
-    // State cho Lịch sử
+
     const [history, setHistory] = useState<Transaction[]>([]);
     const [showHistory, setShowHistory] = useState(false);
 
-    // BỔ SUNG: State cho Top Lists
+
     const [topBooks, setTopBooks] = useState<TopBook[]>([]);
     const [topReaders, setTopReaders] = useState<TopReader[]>([]);
 
     const DEFAULT_IMAGE = "https://via.placeholder.com/300x400?text=No+Image";
 
-    // --- 1. Lấy danh sách sách ---
+
     const fetchBooks = async () => {
         try {
             const res = await api.get('/books'); 
@@ -69,11 +65,11 @@ const Home: React.FC = () => {
         }
     };
 
-    // --- 2. Lấy lịch sử giao dịch ---
+
     const fetchHistory = async () => {
         if (!user) return;
         try {
-            // Sử dụng API đã có: /transactions/history/:readerId
+        
             const res = await api.get(`/transactions/history/${user.id}`); 
             setHistory(res.data);
         } catch (error) {
@@ -81,16 +77,16 @@ const Home: React.FC = () => {
         }
     };
 
-    // --- 3. Lấy dữ liệu Thống kê ---
+
     const fetchTopLists = async () => {
         try {
-            // Lấy Top Books
+        
             const bookRes = await api.get('/stats/top-books');
             setTopBooks(bookRes.data);
 
-            // Lấy Top Readers
+        
             const readerRes = await api.get('/stats/top-readers');
-            // Backend trả về { topReaders: [...] }
+        
             setTopReaders(readerRes.data.topReaders); 
 
         } catch (error) {
@@ -99,17 +95,17 @@ const Home: React.FC = () => {
     };
 
 
-    // --- useEffects ---
+
     useEffect(() => {
         fetchBooks();
-        fetchTopLists(); // Gọi hàm Fetch Top Lists khi component mount
+        fetchTopLists();
     }, []);
 
     useEffect(() => {
         if (showHistory) fetchHistory();
     }, [showHistory]);
 
-    // --- Xử lý Giỏ Sách ---
+
     const addToCart = (book: Book) => {
         if (cart.find(item => item.book_id === book.book_id)) {
             alert("Sách này đã có trong giỏ!");
@@ -152,8 +148,8 @@ const Home: React.FC = () => {
         }
     };
 
-    // --- Styles ---
-    // Giữ nguyên Styles object của bạn
+
+
     const styles = {
         gridContainer: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '25px', padding: '20px 0' },
         bookCard: { cursor: 'pointer', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', backgroundColor: '#fff', height: '320px', border: '1px solid #eee', display: 'flex', flexDirection: 'column' as const },
@@ -177,10 +173,10 @@ const Home: React.FC = () => {
                     <h2 style={{margin:0, color:'#5D4037'}}>LIB</h2> 
                     <div style={{display:'flex', gap:'15px'}}>
                         <button onClick={() => setShowCart(true)} style={{background:'none', border:'none', cursor:'pointer', fontSize:'16px', display:'flex', alignItems:'center'}}>
-                            🛒 Giỏ sách (<b style={{color:'#d32f2f'}}>{cart.length}</b>)
+                            Giỏ sách (<b style={{color:'#d32f2f'}}>{cart.length}</b>)
                         </button>
                         <button onClick={() => setShowHistory(true)} style={{background:'none', border:'none', cursor:'pointer', fontSize:'16px'}}>
-                            📜 Lịch sử
+                            Lịch sử
                         </button>
                     </div>
                 </div>

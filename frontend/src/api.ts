@@ -10,10 +10,10 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Health
+
 export const getHealth = () => api.get<{ ok: boolean }>('/health');
 
-// Books
+
 export interface Book {
   id: number;
   title: string;
@@ -24,7 +24,7 @@ export const getBooks = () => api.get<Book[]>('/books');
 export const addBook = (book: { title: string; author: string; year: number }) =>
   api.post<Book>('/books', book);
 
-// Borrowings
+
 export interface Borrowing {
   id: number;
   book_id: number;
@@ -34,10 +34,10 @@ export interface Borrowing {
 }
 export const getBorrows = () => api.get<Borrowing[]>('/borrows');
 
-// Stats
+
 export const getStats = () => api.get<{ total_books: number }>('/stats');
 
-// Borrowings by month
+
 export interface BorrowByMonth {
   ym: string;
   total: number;

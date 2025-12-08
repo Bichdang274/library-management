@@ -3,7 +3,6 @@ import type { Book, Category } from '../../types';
 import { getBooks, deleteBook } from '../../services/bookService';
 import { getCategories } from '../../services/categoryService';
 
-// SỬA LẠI DÒNG NÀY: Dùng ./BookForm vì file đã nằm cùng thư mục
 import BookForm from './BookForm'; 
 
 const BookList: React.FC = () => {

@@ -1,5 +1,5 @@
 .stats-page {
-  background-color: #f3f4f6; /* nền tổng thể */
+  background-color: #f3f4f6; 
   min-height: 100vh;
   padding: 24px;
   font-family: 'Segoe UI', sans-serif;
@@ -11,7 +11,7 @@
   margin-bottom: 24px;
 }
 
-/* 4 ô thống kê trên cùng một hàng ngang */
+
 .stats-row {
   display: flex;
   justify-content: space-between;
@@ -21,7 +21,7 @@
 
 .stat-card {
   flex: 1;
-  background-color: #f9fafb; /* nền xám trắng */
+  background-color: #f9fafb; 
   border: 1px solid #ddd;
   border-radius: 12px;
   padding: 16px;
@@ -45,7 +45,7 @@
   color: #ef4444;
 }
 
-/* 2 biểu đồ trên cùng một hàng ngang */
+
 .charts-row {
   display: flex;
   justify-content: space-between;
@@ -62,7 +62,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* Export buttons */
+
 .export-menu {
   margin-top: 16px;
 }

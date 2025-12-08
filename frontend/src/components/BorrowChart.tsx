@@ -7,13 +7,13 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler,   // 👈 thêm plugin Filler
+  Filler,   
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-// Đăng ký đầy đủ các thành phần + Filler
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -32,13 +32,13 @@ export default function BorrowChart() {
   useEffect(() => {
     axios.get('http://localhost:5000/api/stats/borrows-by-month')
       .then(res => {
-        console.log("📊 API trả về:", res.data);
+        console.log("API trả về:", res.data);
         const data = res.data.data || [];
-        setLabels(data.map((item: any) => item.ym));   // tháng dạng YYYY-MM
-        setValues(data.map((item: any) => item.total)); // số lượt mượn
+        setLabels(data.map((item: any) => item.ym));   
+        setValues(data.map((item: any) => item.total)); 
       })
       .catch(err => {
-        console.error("❌ Lỗi lấy dữ liệu biểu đồ:", err);
+        console.error("Lỗi lấy dữ liệu biểu đồ:", err);
       });
   }, []);
 
@@ -51,7 +51,7 @@ export default function BorrowChart() {
         borderColor: '#3b82f6',
         backgroundColor: '#93c5fd',
         tension: 0.3,
-        fill: true, // 👈 giờ sẽ hoạt động vì đã có Filler
+        fill: true, 
       },
     ],
   };
@@ -69,7 +69,7 @@ const options = {
         font: {
           family: 'Poppins, sans-serif',
           size: 16,
-          // 👇 SỬA Ở ĐÂY: Bỏ dấu nháy đơn, chuyển thành số
+          
           weight: 700, 
         },
       },

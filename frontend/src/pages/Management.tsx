@@ -2,19 +2,19 @@ import  { useContext } from 'react';
 import { Link} from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import '../styles/Management.css'; 
-import qlbdImg from '../assets/qlbd.png';  // Quản lý bạn đọc
-import qlsImg from '../assets/qls.png';    // Quản lý sách
-import qltlImg from '../assets/qltl.png';  // Quản lý thể loại
-import tpmImg from '../assets/tpm.png';    // Tạo phiếu mượn
-import bdttImg from '../assets/bdtt.png';  // Biểu đồ tăng trưởng
+import qlbdImg from '../assets/qlbd.png';  
+import qlsImg from '../assets/qls.png';    
+import qltlImg from '../assets/qltl.png';  
+import tpmImg from '../assets/tpm.png';    
+import bdttImg from '../assets/bdtt.png';  
 
 const Management = () => {
   const { user, logout } = useContext(AuthContext);
 
-  // Hàm đăng xuất
+  
   const handleLogout = () => {
-    logout(); // Gọi hàm logout từ Context để xóa token và user info
-    // navigate('/login'); // Hàm logout trong Context thường đã xử lý việc này hoặc chuyển hướng
+    logout(); 
+    
   };
 
   return (

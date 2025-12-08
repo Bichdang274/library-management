@@ -15,6 +15,6 @@ const pool = mysql.createPool({
 });
 
 
-console.log(`✅ Database Config: Connected to ${process.env.DB_NAME} at ${process.env.DB_HOST}`);
+console.log(`Database Config: Connected to ${process.env.DB_NAME} at ${process.env.DB_HOST}`);
 
 export default pool;

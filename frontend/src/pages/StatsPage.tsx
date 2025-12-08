@@ -21,15 +21,15 @@ export default function StatsPage() {
   useEffect(() => {
     axios.get('http://localhost:5000/api/stats')
       .then(res => setStats(res.data))
-      .catch(err => console.error("❌ Lỗi lấy stats:", err));
+      .catch(err => console.error("Lỗi lấy stats:", err));
 
     axios.get<Book[]>('http://localhost:5000/api/stats/top-books')
       .then(res => setTopBooks(res.data))
-      .catch(err => console.error("❌ Lỗi lấy top books:", err));
+      .catch(err => console.error("Lỗi lấy top books:", err));
 
     axios.get('http://localhost:5000/api/stats/top-readers')
       .then(res => setTopReaders(res.data.topReaders))
-      .catch(err => console.error("❌ Lỗi lấy top readers:", err));
+      .catch(err => console.error("Lỗi lấy top readers:", err));
   }, []);
 
   // Hàm export file
@@ -47,7 +47,7 @@ export default function StatsPage() {
       link.click();
       link.remove();
     } catch (err) {
-      console.error("❌ Lỗi export:", err);
+      console.error("Lỗi export:", err);
     }
   };
 

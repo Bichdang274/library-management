@@ -16,7 +16,7 @@ export default function StatsPage() {
   useEffect(() => {
     axios.get('http://localhost:5000/api/stats')
       .then(res => setStats(res.data))
-      .catch(err => console.error("❌ Lỗi lấy stats:", err));
+      .catch(err => console.error("Lỗi lấy stats:", err));
   }, []);
 
   const handleExport = async (type: string) => {
@@ -40,7 +40,7 @@ export default function StatsPage() {
 
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(`❌ Lỗi tải file: ${response.status}`);
+        throw new Error(`Lỗi tải file: ${response.status}`);
       }
 
       const blob = await response.blob();
@@ -56,7 +56,7 @@ export default function StatsPage() {
       window.URL.revokeObjectURL(downloadUrl);
       setOpen(false);
     } catch (error) {
-      console.error("❌ Lỗi export:", error);
+      console.error("Lỗi export:", error);
       alert("Xuất dữ liệu thất bại, xem console để biết chi tiết.");
     }
   };

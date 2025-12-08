@@ -1,4 +1,3 @@
-// frontend/src/pages/Books/BookForm.tsx
 import React, { useEffect, useState } from 'react';
 import { getCategories } from '../../services/categoryService';
 import { createBook, updateBook } from '../../services/bookService';
