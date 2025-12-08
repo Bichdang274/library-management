@@ -4,7 +4,7 @@ import { verifyAdmin } from '../middleware/authMiddleware';
 
 const router = Router();
 
-// FIX: Gọi đúng tên hàm Handler
+
 router.get('/', verifyAdmin, readerController.getReadersHandler); 
 router.post('/', verifyAdmin, readerController.createReaderHandler);
 router.put('/:id', verifyAdmin, readerController.updateReaderHandler);

@@ -1,24 +1,18 @@
 import db from "../config/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2/promise";
 
-// ------------------------------------
-// 1. INTERFACE CHO DỮ LIỆU MƯỢN SÁCH
-// ------------------------------------
 export type BorrowStatus = 'BORROWED' | 'RETURNED' | 'OVERDUE';
 
 export interface IBorrow {
   borrow_id: number;
-  reader_id: number; // Thay thế cho user: mongoose.Types.ObjectId
-  book_id: number;   // Thay thế cho book: mongoose.Types.ObjectId
-  borrow_date: Date | string; // Lưu ý kiểu Date trong SQL
+  reader_id: number;
+  book_id: number;  
+  borrow_date: Date | string;
   return_date: Date | string | null;
   due_date: Date | string;
   status: BorrowStatus;
 }
 
-// ------------------------------------
-// 2. CLASS BORROWMODEL CHO CÁC TRUY VẤN
-// ------------------------------------
 class BorrowModel {
   /**
    * @description Lấy tất cả các giao dịch mượn/trả

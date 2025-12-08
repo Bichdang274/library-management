@@ -6,9 +6,7 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`=================================`);
-    console.log(`🚀 Server is running on port ${PORT}`);
-    console.log(`📂 Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`🔗 API Base: http://localhost:${PORT}/api`);
-    console.log(`=================================`);
+    console.log(` Server is running on port ${PORT}`);
+    console.log(` Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(` API Base: http://localhost:${PORT}/api`);
 });

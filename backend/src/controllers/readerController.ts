@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-// FIX LỖI 1192: Dùng Default Import
+
 import readerService from '../services/readerService'; 
 import { AuthRequest } from '../middleware/authMiddleware'; 
 
 
-// Khai báo type của data nhận từ body
+
 interface CreateReaderBody {
     name: string;
     email: string;
@@ -14,10 +14,10 @@ interface CreateReaderBody {
     address?: string;
 }
 
-// 1. Lấy danh sách độc giả
+
 export const getReadersHandler = async (req: Request, res: Response) => {
     try {
-        // GỌI HÀM: Dùng đối tượng readerService.getReaders()
+        
         const readers = await readerService.getReaders(); 
         res.status(200).json({ data: readers });
     } catch (err: unknown) { 
@@ -29,7 +29,7 @@ export const getReadersHandler = async (req: Request, res: Response) => {
 };
 
 
-// 2. Tạo độc giả mới
+
 export const createReaderHandler = async (req: Request<{}, {}, CreateReaderBody>, res: Response) => {
     try {
         const { name, email, password } = req.body;
@@ -38,13 +38,13 @@ export const createReaderHandler = async (req: Request<{}, {}, CreateReaderBody>
             return res.status(400).json({ message: "Thiếu tên, email hoặc mật khẩu!" });
         }
         
-        // Tạo đối tượng dữ liệu và cam kết password là string sau khi validation
+        
         const creationData = {
             ...req.body,
             password: password as string, 
         };
 
-        // GỌI HÀM: Dùng đối tượng readerService.createReader()
+        
         const newId: number = await readerService.createReader(creationData as any); 
 
         return res.status(201).json({ message: "Tạo thành công", readerId: newId });
@@ -57,11 +57,11 @@ export const createReaderHandler = async (req: Request<{}, {}, CreateReaderBody>
 };
 
 
-// 3. Cập nhật độc giả
+
 export const updateReaderHandler = async (req: Request<{ id: string }, {}, Partial<CreateReaderBody>>, res: Response) => {
     try {
         const readerId: string = req.params.id;
-        // GỌI HÀM: Dùng đối tượng readerService.updateReader()
+        
         await readerService.updateReader(readerId, req.body); 
         
         res.status(200).json({ message: 'Cập nhật thành công' });
@@ -70,10 +70,10 @@ export const updateReaderHandler = async (req: Request<{ id: string }, {}, Parti
     }
 };
 
-// 4. Xóa độc giả
+
 export const deleteReaderHandler = async (req: Request<{ id: string }>, res: Response) => {
     try {
-        // GỌI HÀM: Dùng đối tượng readerService.deleteReader()
+        
         await readerService.deleteReader(req.params.id); 
         res.status(200).json({ message: 'Xóa thành công' });
     } catch (err: any) {

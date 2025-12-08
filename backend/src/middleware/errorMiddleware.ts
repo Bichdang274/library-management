@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-// Middleware xử lý lỗi toàn cục
+
 export const errorHandler = (
   err: Error,
   req: Request,

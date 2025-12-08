@@ -1,9 +1,9 @@
-// backend/src/controllers/borrowController.ts
+
 import { Request, Response } from 'express';
 import pool from '../config/db';
 import { RowDataPacket } from 'mysql2';
 
-// --- 1. GET ACTIVE LOANS (For Admin Dashboard) ---
+
 export const getActiveLoans = async (req: Request, res: Response) => {
     try {
         const sql = `
@@ -30,7 +30,7 @@ export const getActiveLoans = async (req: Request, res: Response) => {
     }
 };
 
-// --- 2. GET HISTORY BY READER (For Student Home Page) ---
+
 export const getHistoryByReader = async (req: Request, res: Response) => {
     try {
         const { readerId } = req.params;
@@ -54,7 +54,7 @@ export const getHistoryByReader = async (req: Request, res: Response) => {
     }
 };
 
-// --- 3. SINGLE BOOK BORROW (Legacy/Admin use) ---
+
 export const borrowBook = async (req: Request, res: Response) => {
     const connection = await pool.getConnection();
     try {
@@ -62,16 +62,16 @@ export const borrowBook = async (req: Request, res: Response) => {
 
         const { reader_id, book_id, due_date } = req.body;
 
-        // Check Reader
+        
         const [readers] = await connection.query<RowDataPacket[]>('SELECT * FROM readers WHERE reader_id = ?', [reader_id]);
         if (readers.length === 0) throw new Error('Reader ID not found.');
 
-        // Check Book
+        
         const [books] = await connection.query<RowDataPacket[]>('SELECT available_copies, total_copies FROM books WHERE book_id = ?', [book_id]);
         if (books.length === 0) throw new Error('Book ID not found.');
         if (books[0].available_copies <= 0) throw new Error('Book is out of stock.');
 
-        // Check Quota
+        
         const [users] = await connection.query<RowDataPacket[]>('SELECT quota FROM users WHERE user_id = ?', [reader_id]);
         const userQuota = users[0]?.quota || 5;
 
@@ -84,14 +84,14 @@ export const borrowBook = async (req: Request, res: Response) => {
             throw new Error(`Quota exceeded (${userQuota}). Please return books first.`);
         }
 
-        // Create Loan
+        
         const borrowDate = new Date();
         await connection.query(
             `INSERT INTO borrowings (reader_id, book_id, borrow_date, due_date, status) VALUES (?, ?, ?, ?, 'BORROWED')`,
             [reader_id, book_id, borrowDate, due_date]
         );
 
-        // Update Stock
+        
         await connection.query(
             `UPDATE books SET available_copies = available_copies - 1 WHERE book_id = ?`,
             [book_id]
@@ -108,7 +108,7 @@ export const borrowBook = async (req: Request, res: Response) => {
     }
 };
 
-// --- 4. CART CHECKOUT (Multi-book Borrow for Students) ---
+
 export const borrowCart = async (req: Request, res: Response) => {
     const connection = await pool.getConnection(); 
     try {
@@ -120,7 +120,7 @@ export const borrowCart = async (req: Request, res: Response) => {
             throw new Error('Cart is empty!');
         }
 
-        // Check Quota
+        
         const [users] = await connection.query<RowDataPacket[]>('SELECT quota FROM users WHERE user_id = ?', [reader_id]);
         const userQuota = users[0]?.quota || 5;
 
@@ -134,7 +134,7 @@ export const borrowCart = async (req: Request, res: Response) => {
             throw new Error(`You are borrowing ${borrowingCount} books. Quota is ${userQuota}. Cannot borrow ${book_ids.length} more.`);
         }
 
-        // Process each book
+        
         const borrowDate = new Date();
         const dueDate = new Date();
         dueDate.setDate(borrowDate.getDate() + 14); 
@@ -172,7 +172,7 @@ export const borrowCart = async (req: Request, res: Response) => {
     }
 };
 
-// --- 5. RETURN BOOK (Admin Action) ---
+
 export const returnBook = async (req: Request, res: Response) => {
     const connection = await pool.getConnection();
     try {

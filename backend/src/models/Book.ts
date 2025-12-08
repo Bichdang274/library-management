@@ -1,9 +1,6 @@
 import db from "../config/db";
 import { RowDataPacket, ResultSetHeader } from "mysql2/promise";
 
-// ------------------------------------
-// 1. INTERFACE CHO DỮ LIỆU SÁCH
-// ------------------------------------
 export interface IBook {
   book_id: number;
   name: string;
@@ -14,15 +11,12 @@ export interface IBook {
   total_copies: number;
   available_copies: number;
   image_url: string | null;
-  // Thêm các trường khác nếu cần (ví dụ: category_name khi JOIN)
+
 }
 
-// ------------------------------------
-// 2. CLASS BOOKMODEL CHO CÁC TRUY VẤN CƠ BẢN
-// ------------------------------------
 class BookModel {
   /**
-   * @description Lấy tất cả sách (có thể JOIN với categories)
+   * @description Lấy tất cả sách 
    */
   static async findAll(): Promise<IBook[]> {
     const [rows] = await db.query<RowDataPacket[]>(
@@ -45,7 +39,7 @@ class BookModel {
   }
 
   /**
-   * @description Tạo sách mới (Tương đương với Model.create())
+   * @description Tạo sách mới 
    */
   static async create(bookData: Omit<IBook, 'book_id' | 'total_copies' | 'available_copies'> & { total_copies?: number, available_copies?: number }): Promise<number> {
     const { 
@@ -71,7 +65,7 @@ class BookModel {
    * @description Cập nhật số lượng sách sau khi mượn/trả
    */
   static async updateCopies(bookId: number, change: number): Promise<boolean> {
-    if (change === 0) return true; // Không cần cập nhật
+    if (change === 0) return true;
     
     const [result] = await db.query<ResultSetHeader>(
       `UPDATE books 

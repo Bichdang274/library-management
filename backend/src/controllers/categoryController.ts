@@ -12,7 +12,7 @@ export const getCategories = async (req: Request, res: Response) => {
 
 export const createCategory = async (req: Request, res: Response) => {
     try {
-        // Khớp với SQL: Client gửi lên { "category_name": "Sách Toán" }
+        
         const { category_name } = req.body;
         
         if (!category_name) {
@@ -22,7 +22,7 @@ export const createCategory = async (req: Request, res: Response) => {
         await categoryService.createCategory(category_name);
         res.status(201).json({ message: 'Tạo danh mục thành công' });
     } catch (error: any) {
-        // Mã lỗi MySQL: Trùng tên (Duplicate entry)
+        
         if (error.code === 'ER_DUP_ENTRY') {
             return res.status(400).json({ message: 'Tên thể loại đã tồn tại' });
         }
@@ -55,7 +55,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
         await categoryService.deleteCategory(id);
         res.json({ message: 'Xóa thành công' });
     } catch (error: any) {
-        // Mã lỗi MySQL: Ràng buộc khóa ngoại (Đang có sách thuộc category này)
+        
         if (error.code === 'ER_ROW_IS_REFERENCED_2') {
             return res.status(400).json({ message: 'Không thể xóa: Đang có sách thuộc thể loại này!' });
         }

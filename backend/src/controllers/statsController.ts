@@ -1,10 +1,9 @@
-// backend/src/controllers/statsController.ts
 
 import { Request, Response } from "express";
-import pool from "../config/db"; // Sử dụng pool đã import
+import pool from "../config/db"; 
 import { RowDataPacket } from "mysql2";
 
-// Lấy thống kê tổng quan
+
 export const getStats = async (_req: Request, res: Response): Promise<void> => {
     try {
         const [rows] = await pool.query<RowDataPacket[]>(
@@ -21,7 +20,7 @@ export const getStats = async (_req: Request, res: Response): Promise<void> => {
     }
 };
 
-// ================== API TOP SÁCH ==================
+
 export const getTopBooks = async (_req: Request, res: Response): Promise<void> => {
     try {
         const [rows] = await pool.query<RowDataPacket[]>(
@@ -39,7 +38,7 @@ export const getTopBooks = async (_req: Request, res: Response): Promise<void> =
     }
 };
 
-// ================== API TOP ĐỘC GIẢ ==================
+
 export const getTopReaders = async (_req: Request, res: Response): Promise<void> => {
     try {
         const [rows] = await pool.query<RowDataPacket[]>(
@@ -57,7 +56,7 @@ export const getTopReaders = async (_req: Request, res: Response): Promise<void>
     }
 };
 
-// ================== API BIỂU ĐỒ MƯỢN THEO THÁNG ==================
+
 export const getBorrowsByMonth = async (_req: Request, res: Response): Promise<void> => {
     try {
         const [rows] = await pool.query<RowDataPacket[]>(
@@ -71,7 +70,7 @@ export const getBorrowsByMonth = async (_req: Request, res: Response): Promise<v
     }
 };
 
-// ================== API BIỂU ĐỒ MƯỢN THEO THỂ LOẠI ==================
+
 export const getBorrowsByGenre = async (_req: Request, res: Response): Promise<void> => {
     try {
         const [rows] = await pool.query<RowDataPacket[]>(

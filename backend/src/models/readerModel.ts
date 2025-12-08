@@ -1,12 +1,12 @@
 import type { RowDataPacket, ResultSetHeader, PoolConnection } from 'mysql2/promise'; 
 import db from '../config/db';
 
-// --- FINAL INTERFACES ---
+
 
 interface CreateReaderData {
     name: string;
     email: string;
-    // FIX DỨT ĐIỂM LỖI 2322: Chấp nhận string, null (từ SQL)
+    
     phone_number?: string | null;
     address?: string | null; 
     password_hash: string;
@@ -16,7 +16,7 @@ interface CreateReaderData {
 interface UpdateReaderData {
     name?: string;
     email?: string;
-    // FIX DỨT ĐIỂM LỖI 2322
+    
     phone_number?: string | null;
     address?: string | null;
     quota?: number | string; 
@@ -50,14 +50,14 @@ const ReaderModel = {
         try {
             await connection.beginTransaction();
             
-            // Bước 1: Insert vào bảng readers
+            
             const [resReader] = await connection.query<ResultSetHeader>(
                 `INSERT INTO readers (name, email, phone_number, address) VALUES (?, ?, ?, ?)`,
                 [data.name, data.email, data.phone_number, data.address]
             );
             const newId = resReader.insertId;
             
-            // Bước 2: Insert vào bảng users (để kích hoạt tài khoản)
+            
             await connection.query(
                 `INSERT INTO users (user_id, password_hash, quota) VALUES (?, ?, ?)`,
                 [newId, data.password_hash, data.quota || 5]

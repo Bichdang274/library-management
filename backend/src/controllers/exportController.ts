@@ -1,4 +1,4 @@
-// backend/src/controllers/exportController.ts
+
 
 import { Request, Response } from "express";
 import { RowDataPacket } from "mysql2/promise"; 
@@ -6,11 +6,11 @@ import { Parser } from "json2csv";
 import ExcelJS from "exceljs";
 import path from "path";
 const PDFDocument = require("pdfkit");
-import db from "../config/db"; // Sử dụng db (là PromisePool)
+import db from "../config/db"; 
 
-// Tái sử dụng hàm truy vấn DB
+
 async function fetchAllStats() {
-    // FIX: Sử dụng db.query trực tiếp
+    
     const [statsRows] = await db.query<RowDataPacket[]>(
         `SELECT (SELECT COUNT(*) FROM books) AS totalBooks,
                 (SELECT COUNT(*) FROM borrowings) AS totalBorrows,
@@ -33,7 +33,7 @@ async function fetchAllStats() {
     return { statsRows, monthRows, booksByGenre, topBooks, topReaders };
 }
 
-// ================== EXPORT CSV ==================
+
 export const exportCsv = async (_req: Request, res: Response) => {
     try {
         const { statsRows, monthRows, booksByGenre, topBooks, topReaders } = await fetchAllStats();
@@ -58,18 +58,18 @@ export const exportCsv = async (_req: Request, res: Response) => {
     }
 };
 
-// ... (Giữ nguyên logic exportXlsx và exportPdf, chỉ cần đảm bảo các vòng lặp đã thêm ': any')
+
 export const exportXlsx = async (_req: Request, res: Response) => {
     try {
         const { statsRows, monthRows, booksByGenre, topBooks, topReaders } = await fetchAllStats();
         const workbook = new ExcelJS.Workbook();
         
-        // ...
+        
         monthRows.forEach((r: any) => workbook.addWorksheet("Borrows by Month").addRow(r)); 
         booksByGenre.forEach((r: any) => workbook.addWorksheet("Books by Genre").addRow(r)); 
         topBooks.forEach((r: any) => workbook.addWorksheet("Top Books").addRow(r)); 
         topReaders.forEach((r: any) => workbook.addWorksheet("Top Readers").addRow(r)); 
-        // ...
+        
         await workbook.xlsx.write(res);
         res.end();
     } catch (err: any) {
@@ -83,7 +83,7 @@ export const exportPdf = async (_req: Request, res: Response) => {
         const doc = new PDFDocument();
         const fontPath = path.join(__dirname, "..", "fonts", "Roboto-Regular.ttf"); 
         doc.registerFont("Roboto", fontPath).font("Roboto");
-        // ...
+        
         topBooks.forEach((b: any, idx: number) => { /* ... */ }); 
         topReaders.forEach((r: any, idx: number) => { /* ... */ }); 
         monthRows.forEach((m: any) => { /* ... */ }); 

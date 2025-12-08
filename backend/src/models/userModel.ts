@@ -1,7 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
 import db from '../config/db';
 
-// Định nghĩa kiểu dữ liệu User trả về (Kết hợp Users và Readers)
 interface UserResult extends RowDataPacket {
     user_id: number;
     password_hash: string;
@@ -18,7 +17,7 @@ interface CreateUserData {
 }
 
 const UserModel = {
-    // Hàm này rất quan trọng cho chức năng Login
+
     findByEmail: async (email: string): Promise<UserResult | undefined> => { 
         try {
             const query = `
@@ -36,7 +35,7 @@ const UserModel = {
         }
     },
 
-    // Hàm này hỗ trợ tạo User mới
+
     createUser: async (data: CreateUserData): Promise<void> => {
         try {
             const query = `
@@ -55,5 +54,4 @@ const UserModel = {
     }
 };
 
-// SỬA QUAN TRỌNG: Dùng export default để khớp với authService
 export default UserModel;

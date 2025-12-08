@@ -1,37 +1,37 @@
-// backend/src/controllers/authController.ts
+
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import pool from '../config/db';
-import { ManagerModel } from '../models/managerModel'; // Đảm bảo import đúng
+import { ManagerModel } from '../models/managerModel'; 
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret_key_tam_thoi';
 
-// Interface mở rộng request để chứa user info (dùng cho getProfile)
+
 interface AuthenticatedRequest extends Request {
     user?: any;
 }
 
-// --- 1. REGISTER (ĐĂNG KÝ ADMIN/MANAGER) ---
+
 export const register = async (req: Request, res: Response) => {
-    const connection = await pool.getConnection(); // Dùng transaction cho an toàn
+    const connection = await pool.getConnection(); 
     try {
         await connection.beginTransaction();
 
         const { name, email, password, phone_number, address } = req.body;
 
-        // Validate cơ bản
+        
         if (!name || !email || !password) {
             return res.status(400).json({ message: 'Vui lòng điền tên, email và mật khẩu.' });
         }
 
-        // 1. Kiểm tra email có trùng trong bảng Managers không? (Tránh trùng admin)
+        
         const existingManager = await ManagerModel.findByEmail(email);
         if (existingManager) {
             return res.status(400).json({ message: 'Email này đã được sử dụng.' });
         }
 
-        // 2. Kiểm tra email có trùng trong bảng Readers không?
+        
         const [existingReaders]: any = await connection.execute(
             'SELECT reader_id FROM readers WHERE email = ?', [email]
         );
@@ -39,21 +39,21 @@ export const register = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Email này đã được sử dụng.' });
         }
 
-        // 3. Mã hóa mật khẩu
+        
         const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(password, salt);
 
-        // 4. Tạo Reader (Bảng readers)
+        
         const [resReader]: any = await connection.execute(
             'INSERT INTO readers (name, email, phone_number, address) VALUES (?, ?, ?, ?)',
             [name, email, phone_number || null, address || null]
         );
         const newReaderId = resReader.insertId;
 
-        // 5. Tạo User (Bảng users - để lưu mật khẩu và quota)
+        
         await connection.execute(
             'INSERT INTO users (user_id, password_hash, quota) VALUES (?, ?, ?)',
-            [newReaderId, passwordHash, 5] // Mặc định quota mượn sách là 5
+            [newReaderId, passwordHash, 5] 
         );
 
         await connection.commit();
@@ -61,19 +61,19 @@ export const register = async (req: Request, res: Response) => {
         return res.status(201).json({ message: 'Đăng ký thành công! Bạn có thể đăng nhập ngay.' });
 
     } catch (error: any) {
-        await connection.rollback(); // Nếu lỗi thì hoàn tác
+        await connection.rollback(); 
         console.error("Register Error:", error);
         return res.status(500).json({ message: 'Lỗi server khi đăng ký', error: error.message });
     } finally {
         connection.release();
     }
 };
-// --- 2. LOGIN (ĐĂNG NHẬP - LOGIC 2 BẢNG) ---
+
 export const login = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
 
-        // BƯỚC 1: KIỂM TRA BẢNG MANAGERS
+        
         const [managers]: any = await pool.execute(
             'SELECT * FROM managers WHERE email = ?', 
             [email]
@@ -103,7 +103,7 @@ export const login = async (req: Request, res: Response) => {
             }
         }
 
-        // BƯỚC 2: KIỂM TRA BẢNG READERS (JOIN USERS)
+        
         const sqlReader = `
             SELECT r.reader_id, r.name, r.email, u.password_hash 
             FROM readers r
@@ -136,7 +136,7 @@ export const login = async (req: Request, res: Response) => {
             }
         }
 
-        // BƯỚC 3: KHÔNG TÌM THẤY
+        
         return res.status(401).json({ message: 'Email hoặc mật khẩu không đúng.' });
 
     } catch (error: any) {
@@ -145,10 +145,10 @@ export const login = async (req: Request, res: Response) => {
     }
 };
 
-// --- 3. GET PROFILE (LẤY THÔNG TIN USER TỪ TOKEN) ---
+
 export const getProfile = async (req: AuthenticatedRequest, res: Response) => {
     try {
-        // req.user được gán từ middleware authMiddleware
+        
         if (!req.user) {
             return res.status(404).json({ message: 'Không tìm thấy thông tin người dùng.' });
         }
