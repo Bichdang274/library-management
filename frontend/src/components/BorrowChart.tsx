@@ -30,7 +30,7 @@ export default function BorrowChart() {
   const [values, setValues] = useState<number[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/borrows-by-month')
+    axios.get('http://localhost:5000/api/stats/borrows-by-month')
       .then(res => {
         console.log("📊 API trả về:", res.data);
         const data = res.data.data || [];

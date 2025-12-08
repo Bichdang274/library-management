@@ -16,7 +16,6 @@ import BookList from './pages/Books/BookList';
 import CategoryList from './pages/Categories/CategoryList';
 import Readers from './pages/Readers';
 import TransactionPage from './pages/TransactionManager/TransactionPage';
-import Stats from './pages/Stats';
 import StatsPage from './pages/StatsPage';
 
 // Định nghĩa Interface
@@ -54,9 +53,6 @@ function App() {
                         <PrivateRoute><TransactionPage/></PrivateRoute>
                     } />
 
-                    <Route path="/stats" element={
-                        <PrivateRoute><Stats /></PrivateRoute>
-                    } />
 
                     <Route path="/statsPage" element={
                         <PrivateRoute><StatsPage /></PrivateRoute>

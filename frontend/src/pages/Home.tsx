@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext, type AuthContextType } from '../context/AuthContext';
 import api from '../services/api';
 import '../styles/Home.css';
+// Lưu ý: Cần đảm bảo file '../styles/Home.css' có định nghĩa các styles cho Top Lists 
+// (như .charts-row, .chart-box, .top-list, .highlight, v.v.)
 
 // --- Interface ---
 interface Book {
@@ -25,6 +27,11 @@ interface Transaction {
     status: 'BORROWED' | 'RETURNED' | 'OVERDUE';
 }
 
+// BỔ SUNG: Interfaces cho Top Lists (được lấy từ API thống kê)
+interface TopBook { title: string; borrow_count: number; }
+interface TopReader { reader: string; borrow_count: number; }
+
+
 const Home: React.FC = () => {
     const { user, logout } = useContext(AuthContext) as AuthContextType;
     const [books, setBooks] = useState<Book[]>([]);
@@ -33,7 +40,7 @@ const Home: React.FC = () => {
     // State cho Modal chi tiết sách
     const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
-    // State cho Giỏ Sách (Cart) - Lưu mảng ID sách
+    // State cho Giỏ Sách (Cart)
     const [cart, setCart] = useState<Book[]>([]);
     const [showCart, setShowCart] = useState(false);
 
@@ -41,12 +48,16 @@ const Home: React.FC = () => {
     const [history, setHistory] = useState<Transaction[]>([]);
     const [showHistory, setShowHistory] = useState(false);
 
+    // BỔ SUNG: State cho Top Lists
+    const [topBooks, setTopBooks] = useState<TopBook[]>([]);
+    const [topReaders, setTopReaders] = useState<TopReader[]>([]);
+
     const DEFAULT_IMAGE = "https://via.placeholder.com/300x400?text=No+Image";
 
     // --- 1. Lấy danh sách sách ---
     const fetchBooks = async () => {
         try {
-            const res = await api.get('/books'); // Hoặc /books1 tùy backend
+            const res = await api.get('/books'); 
             let realData: Book[] = [];
             if (res.data && Array.isArray(res.data)) realData = res.data;
             else if (res.data && Array.isArray(res.data.data)) realData = res.data.data;
@@ -62,9 +73,7 @@ const Home: React.FC = () => {
     const fetchHistory = async () => {
         if (!user) return;
         try {
-            // Giả sử API lấy lịch sử cá nhân là /transactions/my-history
-            // Nếu chưa có API này, bạn cần thêm vào Backend
-            // Ở đây mình dùng tạm API filter nếu có, hoặc bạn cần tạo API riêng
+            // Sử dụng API đã có: /transactions/history/:readerId
             const res = await api.get(`/transactions/history/${user.id}`); 
             setHistory(res.data);
         } catch (error) {
@@ -72,8 +81,28 @@ const Home: React.FC = () => {
         }
     };
 
+    // --- 3. Lấy dữ liệu Thống kê ---
+    const fetchTopLists = async () => {
+        try {
+            // Lấy Top Books
+            const bookRes = await api.get('/stats/top-books');
+            setTopBooks(bookRes.data);
+
+            // Lấy Top Readers
+            const readerRes = await api.get('/stats/top-readers');
+            // Backend trả về { topReaders: [...] }
+            setTopReaders(readerRes.data.topReaders); 
+
+        } catch (error) {
+            console.error("Lỗi tải Top Lists:", error);
+        }
+    };
+
+
+    // --- useEffects ---
     useEffect(() => {
         fetchBooks();
+        fetchTopLists(); // Gọi hàm Fetch Top Lists khi component mount
     }, []);
 
     useEffect(() => {
@@ -82,12 +111,10 @@ const Home: React.FC = () => {
 
     // --- Xử lý Giỏ Sách ---
     const addToCart = (book: Book) => {
-        // Kiểm tra đã có trong giỏ chưa
         if (cart.find(item => item.book_id === book.book_id)) {
             alert("Sách này đã có trong giỏ!");
             return;
         }
-        // Kiểm tra còn sách trong kho không
         if (book.available_copies <= 0) {
             alert("Sách này đã hết hàng!");
             return;
@@ -110,7 +137,6 @@ const Home: React.FC = () => {
         if (!window.confirm(`Xác nhận mượn ${cart.length} cuốn sách này?`)) return;
 
         try {
-            // Gửi danh sách ID lên Server
             const bookIds = cart.map(b => b.book_id);
             await api.post('/transactions/checkout', { 
                 reader_id: user.id, 
@@ -118,15 +144,16 @@ const Home: React.FC = () => {
             });
             
             alert("Mượn sách thành công! Vui lòng đến thư viện để nhận sách.");
-            setCart([]); // Xóa giỏ
-            setShowCart(false); // Đóng modal
-            fetchBooks(); // Load lại danh sách để cập nhật số lượng
+            setCart([]);
+            setShowCart(false);
+            fetchBooks();
         } catch (error: any) {
             alert("Lỗi mượn sách: " + (error.response?.data?.message || "Có lỗi xảy ra"));
         }
     };
 
     // --- Styles ---
+    // Giữ nguyên Styles object của bạn
     const styles = {
         gridContainer: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '25px', padding: '20px 0' },
         bookCard: { cursor: 'pointer', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', backgroundColor: '#fff', height: '320px', border: '1px solid #eee', display: 'flex', flexDirection: 'column' as const },
@@ -146,7 +173,8 @@ const Home: React.FC = () => {
             {/* --- HEADER --- */}
             <div className="header" style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'15px 30px', backgroundColor:'#fff', boxShadow:'0 2px 4px rgba(0,0,0,0.1)'}}>
                 <div style={{display:'flex', alignItems:'center', gap:'20px'}}>
-                    <h2 style={{margin:0, color:'#5D4037'}}>LIB</h2>
+                    {/* Sử dụng màu vintage từ yêu cầu cá nhân hóa */}
+                    <h2 style={{margin:0, color:'#5D4037'}}>LIB</h2> 
                     <div style={{display:'flex', gap:'15px'}}>
                         <button onClick={() => setShowCart(true)} style={{background:'none', border:'none', cursor:'pointer', fontSize:'16px', display:'flex', alignItems:'center'}}>
                             🛒 Giỏ sách (<b style={{color:'#d32f2f'}}>{cart.length}</b>)
@@ -164,7 +192,42 @@ const Home: React.FC = () => {
             </div>
 
             <div className="content-body" style={{padding:'30px'}}>
-                <h3 className="section-title">DANH MỤC SÁCH</h3>
+                
+                {/* --- TOP 5 SÁCH HOT & MỌT SÁCH (Phần đã thêm) --- */}
+                <h3 className="section-title" style={{color:'#5D4037'}}>THỐNG KÊ NỔI BẬT</h3>
+                <div className="charts-row" style={{display:'flex', gap:'25px', marginBottom:'30px'}}> 
+                    
+                    {/* TOP 5 SÁCH HOT */}
+                    <div className="chart-box" style={{flex:1, padding:'20px', borderRadius:'8px', backgroundColor:'#FAF8F1', boxShadow:'0 2px 4px rgba(0,0,0,0.1)'}}>
+                        <h2 style={{color:'#4E342E', marginTop:0}}>Top 5 Sách Hot</h2>
+                        <ul className="top-list" style={{listStyle:'none', padding:0}}>
+                            {topBooks.length === 0 ? <p style={{color:'#795548'}}>Đang tải...</p> : topBooks.map((book, idx) => (
+                                <li key={idx} className={idx === 0 ? 'highlight' : ''} style={{padding:'10px 0', borderBottom:'1px dotted #ccc', display:'flex', justifyContent:'space-between', alignItems:'center', fontWeight: idx === 0 ? 'bold' : 'normal'}}>
+                                    <span className={idx === 0 ? 'rank-badge' : 'rank'} style={{backgroundColor: idx === 0 ? '#8D6E63' : 'transparent', color: idx === 0 ? 'white' : '#212121', padding: '2px 8px', borderRadius: '4px', marginRight: '10px'}}>{`#${idx + 1}`}</span>
+                                    <span className="item-title" style={{flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{book.title}</span>
+                                    <span className="item-count" style={{color:'#4E342E'}}>{book.borrow_count} lượt</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* TOP 5 MỌT SÁCH */}
+                    <div className="chart-box" style={{flex:1, padding:'20px', borderRadius:'8px', backgroundColor:'#FAF8F1', boxShadow:'0 2px 4px rgba(0,0,0,0.1)'}}>
+                        <h2 style={{color:'#4E342E', marginTop:0}}>Top 5 Mọt Sách</h2>
+                        <ul className="top-list" style={{listStyle:'none', padding:0}}>
+                            {topReaders.length === 0 ? <p style={{color:'#795548'}}>Đang tải...</p> : topReaders.map((reader, idx) => (
+                                <li key={idx} className={idx === 0 ? 'highlight' : ''} style={{padding:'10px 0', borderBottom:'1px dotted #ccc', display:'flex', justifyContent:'space-between', alignItems:'center', fontWeight: idx === 0 ? 'bold' : 'normal'}}>
+                                    <span className={idx === 0 ? 'rank-badge' : 'rank'} style={{backgroundColor: idx === 0 ? '#8D6E63' : 'transparent', color: idx === 0 ? 'white' : '#212121', padding: '2px 8px', borderRadius: '4px', marginRight: '10px'}}>{`#${idx + 1}`}</span>
+                                    <span className="item-title" style={{flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{reader.reader}</span>
+                                    <span className="item-count" style={{color:'#4E342E'}}>{reader.borrow_count} lượt</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+
+
+                <h3 className="section-title" style={{color:'#5D4037', marginTop:'30px'}}>DANH MỤC SÁCH</h3>
                 
                 {loadingBooks ? (
                     <div style={{textAlign:'center'}}>Đang tải dữ liệu...</div>
@@ -305,7 +368,7 @@ const Home: React.FC = () => {
                 </div>
             )}
 
-            {/* --- MODAL CHI TIẾT SÁCH (GIỮ NGUYÊN NHƯ CŨ NẾU CẦN) --- */}
+            {/* --- MODAL CHI TIẾT SÁCH --- */}
             {selectedBook && (
                 <div style={styles.modalOverlay} onClick={() => setSelectedBook(null)}>
                     <div style={{...styles.modalContent, display:'flex', overflow:'hidden', padding:0, maxWidth:'700px'}} onClick={e => e.stopPropagation()}>

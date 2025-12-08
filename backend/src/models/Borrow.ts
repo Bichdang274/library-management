@@ -1,26 +1,66 @@
-import mongoose, { Document, Schema } from "mongoose";
+import db from "../config/db";
+import { RowDataPacket, ResultSetHeader } from "mysql2/promise";
 
-// Interface cho Borrow document
-export interface IBorrow extends Document {
-  book: mongoose.Types.ObjectId;
-  user: mongoose.Types.ObjectId;
-  borrowedAt: Date;
-  returnedAt?: Date;
-  createdAt?: Date;
-  updatedAt?: Date;
+// ------------------------------------
+// 1. INTERFACE CHO DỮ LIỆU MƯỢN SÁCH
+// ------------------------------------
+export type BorrowStatus = 'BORROWED' | 'RETURNED' | 'OVERDUE';
+
+export interface IBorrow {
+  borrow_id: number;
+  reader_id: number; // Thay thế cho user: mongoose.Types.ObjectId
+  book_id: number;   // Thay thế cho book: mongoose.Types.ObjectId
+  borrow_date: Date | string; // Lưu ý kiểu Date trong SQL
+  return_date: Date | string | null;
+  due_date: Date | string;
+  status: BorrowStatus;
 }
 
-// Schema định nghĩa cấu trúc dữ liệu
-const borrowSchema: Schema<IBorrow> = new Schema(
-  {
-    book: { type: Schema.Types.ObjectId, ref: "Book", required: true },
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    borrowedAt: { type: Date, default: Date.now },
-    returnedAt: { type: Date },
-  },
-  { timestamps: true }
-);
+// ------------------------------------
+// 2. CLASS BORROWMODEL CHO CÁC TRUY VẤN
+// ------------------------------------
+class BorrowModel {
+  /**
+   * @description Lấy tất cả các giao dịch mượn/trả
+   */
+  static async findAll(): Promise<IBorrow[]> {
+    const [rows] = await db.query<RowDataPacket[]>(
+      `SELECT * FROM borrowings`
+    );
+    return rows as IBorrow[];
+  }
 
-// Xuất model với type an toàn
-const Borrow = mongoose.model<IBorrow>("Borrow", borrowSchema);
-export default Borrow;
+  /**
+   * @description Tạo một giao dịch mượn mới
+   */
+  static async createBorrow(data: { 
+    reader_id: number; 
+    book_id: number; 
+    borrow_date: Date | string; 
+    due_date: Date | string; 
+  }): Promise<number> {
+    const { reader_id, book_id, borrow_date, due_date } = data;
+    
+    const [result] = await db.query<ResultSetHeader>(
+      `INSERT INTO borrowings (reader_id, book_id, borrow_date, due_date, status) 
+       VALUES (?, ?, ?, ?, 'BORROWED')`,
+      [reader_id, book_id, borrow_date, due_date]
+    );
+    return result.insertId;
+  }
+
+  /**
+   * @description Cập nhật trạng thái sách đã trả và ngày trả
+   */
+  static async updateToReturned(borrowId: number): Promise<boolean> {
+    const [result] = await db.query<ResultSetHeader>(
+      `UPDATE borrowings 
+       SET status = 'RETURNED', return_date = NOW()
+       WHERE borrow_id = ? AND status = 'BORROWED'`,
+      [borrowId]
+    );
+    return result.affectedRows > 0;
+  }
+}
+
+export default BorrowModel;

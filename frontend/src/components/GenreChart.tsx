@@ -18,7 +18,7 @@ export default function GenreChart() {
   const [labels, setLabels] = useState<string[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/borrows-by-genre')
+    axios.get('http://localhost:5000/api/stats/borrows-by-genre')
       .then(res => {
         console.log("📊 API trả về:", res.data);
         const data = res.data.data || [];

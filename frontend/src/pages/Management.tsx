@@ -7,7 +7,6 @@ import qlsImg from '../assets/qls.png';    // Quản lý sách
 import qltlImg from '../assets/qltl.png';  // Quản lý thể loại
 import tpmImg from '../assets/tpm.png';    // Tạo phiếu mượn
 import bdttImg from '../assets/bdtt.png';  // Biểu đồ tăng trưởng
-import dtqImg from '../assets/dtq.png';    // Dashboard tổng quan
 
 const Management = () => {
   const { user, logout } = useContext(AuthContext);
@@ -71,14 +70,10 @@ const Management = () => {
         <section className="menu-group">
           <h2 className="group-title"> Báo Cáo & Thống Kê</h2>
           <div className="card-grid">
-            <Link to="/Stats" className="card card-purple">
-              <div className="icon"><img src={dtqImg} alt="Tổng quan" className="card-icon" /></div>
-              <span>Dashboard Tổng quan</span>
-            </Link>
 
             <Link to="/statsPage" className="card card-purple">
               <div className="icon"><img src={bdttImg} alt="Tăng trưởng" className="card-icon" /></div>
-              <span>Biểu đồ Tăng trưởng</span>
+              <span>Thống kê & Báo cáo</span>
             </Link>
           </div>
         </section>
