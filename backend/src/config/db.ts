@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Tạo kết nối Pool
 const pool = mysql.createPool({ 
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -14,7 +13,6 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-// Log thông báo kết nối thành công (không in pass)
 console.log(`✅ Database Config: Connected to ${process.env.DB_NAME} at ${process.env.DB_HOST}`);
 
 export default pool;

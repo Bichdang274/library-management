@@ -114,7 +114,9 @@ const Readers: React.FC = () => {
                     <span className="subtitle">Hồ sơ lưu trữ thành viên</span>
                 </div>
                 <div className="user-control">
-                    <span>Thủ thư: <strong>{user?.name}</strong></span>
+                    <span style={{ color: '#5D4037', fontWeight: 'bold' }}>
+                        Thủ thư: {user?.name}
+                    </span>
                     <button onClick={logout} className="btn-logout-small">Thoát</button>
                 </div>
             </div>

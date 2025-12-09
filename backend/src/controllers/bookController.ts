@@ -1,9 +1,7 @@
-// backend/src/controllers/bookController.ts
 import { Request, Response } from 'express';
 import pool from '../config/db';
 import { RowDataPacket } from 'mysql2';
 
-// --- 1. LẤY DANH SÁCH ---
 export const getBooks = async (req: Request, res: Response) => {
     try {
         const { search, category_id } = req.query;
@@ -35,7 +33,6 @@ export const getBooks = async (req: Request, res: Response) => {
     }
 };
 
-// --- 2. LẤY CHI TIẾT ---
 export const getBookById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
@@ -47,13 +44,10 @@ export const getBookById = async (req: Request, res: Response) => {
     }
 };
 
-// --- 3. TẠO SÁCH MỚI (Lưu URL ảnh) ---
 export const createBook = async (req: Request, res: Response) => {
     try {
-        // Nhận image_url từ body
         const { name, author, publisher, year_published, category_id, total_copies, image_url } = req.body;
 
-        // available_copies mặc định bằng total_copies
         const available_copies = total_copies;
 
         const sql = `
@@ -64,7 +58,7 @@ export const createBook = async (req: Request, res: Response) => {
         
         await pool.query(sql, [
             name, author, publisher, year_published, category_id, total_copies, available_copies, 
-            image_url || null // Nếu không nhập thì lưu NULL
+            image_url || null 
         ]);
 
         res.status(201).json({ message: 'Thêm sách thành công' });
@@ -74,7 +68,6 @@ export const createBook = async (req: Request, res: Response) => {
     }
 };
 
-// --- 4. CẬP NHẬT SÁCH ---
 export const updateBook = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
@@ -88,7 +81,7 @@ export const updateBook = async (req: Request, res: Response) => {
 
         await pool.query(sql, [
             name, author, publisher, year_published, category_id, total_copies, 
-            image_url || null, // Cập nhật link ảnh mới
+            image_url || null, 
             id
         ]);
 
@@ -100,7 +93,6 @@ export const updateBook = async (req: Request, res: Response) => {
     }
 };
 
-// --- 5. XÓA SÁCH ---
 export const deleteBook = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;

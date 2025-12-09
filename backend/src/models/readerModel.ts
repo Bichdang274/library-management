@@ -1,12 +1,9 @@
 import type { RowDataPacket, ResultSetHeader, PoolConnection } from 'mysql2/promise'; 
 import db from '../config/db';
 
-// --- FINAL INTERFACES ---
-
 interface CreateReaderData {
     name: string;
     email: string;
-    // FIX DỨT ĐIỂM LỖI 2322: Chấp nhận string, null (từ SQL)
     phone_number?: string | null;
     address?: string | null; 
     password_hash: string;
@@ -16,10 +13,9 @@ interface CreateReaderData {
 interface UpdateReaderData {
     name?: string;
     email?: string;
-    // FIX DỨT ĐIỂM LỖI 2322
     phone_number?: string | null;
     address?: string | null;
-    quota?: number | string; 
+    quota?: number; 
     password_hash?: string;
 }
 
@@ -31,7 +27,6 @@ interface ReaderWithQuota extends RowDataPacket {
     address: string | null;
     quota: number;
 }
-
 
 const ReaderModel = {
     getAll: async (): Promise<ReaderWithQuota[]> => { 
@@ -50,14 +45,12 @@ const ReaderModel = {
         try {
             await connection.beginTransaction();
             
-            // Bước 1: Insert vào bảng readers
             const [resReader] = await connection.query<ResultSetHeader>(
                 `INSERT INTO readers (name, email, phone_number, address) VALUES (?, ?, ?, ?)`,
                 [data.name, data.email, data.phone_number, data.address]
             );
             const newId = resReader.insertId;
             
-            // Bước 2: Insert vào bảng users (để kích hoạt tài khoản)
             await connection.query(
                 `INSERT INTO users (user_id, password_hash, quota) VALUES (?, ?, ?)`,
                 [newId, data.password_hash, data.quota || 5]
@@ -78,38 +71,32 @@ const ReaderModel = {
         try {
             await connection.beginTransaction();
             
-            const readerFields = ['name', 'email', 'phone_number', 'address']
-                .filter(field => (data as any)[field] !== undefined);
-            
+            const readerFields = [];
+            const readerValues = [];
+            if (data.name !== undefined) { readerFields.push('name=?'); readerValues.push(data.name); }
+            if (data.email !== undefined) { readerFields.push('email=?'); readerValues.push(data.email); }
+            if (data.phone_number !== undefined) { readerFields.push('phone_number=?'); readerValues.push(data.phone_number); }
+            if (data.address !== undefined) { readerFields.push('address=?'); readerValues.push(data.address); }
+
             if (readerFields.length > 0) {
-                const readerValues = readerFields.map(field => (data as any)[field]);
-                const readerSql = `UPDATE readers SET ${readerFields.map(f => `${f}=?`).join(', ')} WHERE reader_id=?`;
-                await connection.query(readerSql, [...readerValues, id]);
+                readerValues.push(id);
+                await connection.query(
+                    `UPDATE readers SET ${readerFields.join(', ')} WHERE reader_id=?`, 
+                    readerValues
+                );
             }
             
-            let check: RowDataPacket[] = [];
-            const hasUserFields = (data.quota !== undefined && data.quota !== '') || (data.password_hash !== undefined && data.password_hash !== '');
-            
-            if (hasUserFields) {
-                 [check] = await connection.query<RowDataPacket[]>('SELECT user_id FROM users WHERE user_id = ?', [id]);
-            }
-            
-            const quotaIsPresent = data.quota !== undefined && data.quota !== '';
-            if (quotaIsPresent) {
-                if (check.length > 0) { 
-                    await connection.query(`UPDATE users SET quota=? WHERE user_id=?`, [data.quota, id]);
-                } else {
-                    await connection.query(`INSERT INTO users (user_id, quota) VALUES (?, ?)`, [id, data.quota]);
-                }
-            }
-            
-            const passwordIsPresent = data.password_hash !== undefined && data.password_hash !== '';
-            if (passwordIsPresent) {
-                if (check.length > 0 || quotaIsPresent) { 
-                    await connection.query(`UPDATE users SET password_hash=? WHERE user_id=?`, [data.password_hash, id]);
-                } else { 
-                    await connection.query(`INSERT INTO users (user_id, password_hash) VALUES (?, ?)`, [id, data.password_hash]);
-                }
+            const userFields = [];
+            const userValues = [];
+            if (data.quota !== undefined) { userFields.push('quota=?'); userValues.push(data.quota); }
+            if (data.password_hash !== undefined) { userFields.push('password_hash=?'); userValues.push(data.password_hash); }
+
+            if (userFields.length > 0) {
+                userValues.push(id);
+                await connection.query(
+                    `UPDATE users SET ${userFields.join(', ')} WHERE user_id=?`,
+                    userValues
+                );
             }
 
             await connection.commit();

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { getActiveLoans, createLoan, returnBook } from '../../services/transactionService';
 import styles from "../../styles/TransactionPage.module.css";
 
 interface Loan {
@@ -15,26 +15,21 @@ interface Loan {
 
 const TransactionPage = () => {
   const [activeTab, setActiveTab] = useState('borrow');
-  
   const [formData, setFormData] = useState({ reader_id: '', book_id: '', due_date: '' });
-  
   const [activeLoans, setActiveLoans] = useState<Loan[]>([]);
-  
   const [message, setMessage] = useState({ text: '', type: '' });
 
   const fetchActiveLoans = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/transactions/active');
-      setActiveLoans(res.data);
+      const data = await getActiveLoans();
+      setActiveLoans(data);
     } catch (error) {
       console.error("Lỗi tải dữ liệu", error);
     }
   };
 
   useEffect(() => {
-    if (activeTab === 'return') {
-      fetchActiveLoans();
-    }
+    fetchActiveLoans();
   }, [activeTab]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,9 +40,15 @@ const TransactionPage = () => {
     e.preventDefault();
     setMessage({ text: '', type: '' });
     try {
-      await axios.post('http://localhost:5000/api/transactions/borrow', formData);
+      await createLoan(formData);
+      
       setMessage({ text: 'Tạo phiếu mượn thành công!', type: 'success' });
       setFormData({ reader_id: '', book_id: '', due_date: '' });
+      
+      await fetchActiveLoans(); 
+      
+      setTimeout(() => setActiveTab('return'), 1000);
+
     } catch (error: any) { 
       setMessage({ 
         text: error.response?.data?.message || 'Có lỗi xảy ra', 
@@ -57,10 +58,10 @@ const TransactionPage = () => {
   };
 
   const handleReturn = async (borrow_id: number, book_id: number) => {
-    if (!window.confirm("Xác trả lại sách này?")) return;
+    if (!window.confirm("Xác nhận trả lại sách này?")) return;
     try {
-      await axios.post('http://localhost:5000/api/transactions/return', { borrow_id, book_id });
-      fetchActiveLoans();
+      await returnBook({ borrow_id, book_id });
+      await fetchActiveLoans();
       alert("Đã cập nhật trả sách thành công!");
     } catch (error) {
       alert("Lỗi khi cập nhật trả sách.");

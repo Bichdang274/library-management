@@ -9,13 +9,11 @@ export interface Borrow extends RowDataPacket {
     return_date?: Date;
     due_date: Date;
     status: 'BORROWED' | 'RETURNED' | 'OVERDUE';
-    // Các trường join thêm để hiển thị đẹp
     book_name?: string;
     reader_name?: string;
 }
 
 const BorrowModel = {
-    // Lấy danh sách phiếu mượn (kèm tên sách và tên người đọc)
     getAll: async (): Promise<Borrow[]> => {
         const sql = `
             SELECT br.*, b.name as book_name, r.name as reader_name
@@ -28,7 +26,6 @@ const BorrowModel = {
         return rows;
     },
 
-    // Lấy phiếu mượn của riêng 1 độc giả (Dùng cho trang cá nhân)
     getByReaderId: async (readerId: number): Promise<Borrow[]> => {
         const sql = `
             SELECT br.*, b.name as book_name 
@@ -46,7 +43,6 @@ const BorrowModel = {
         return rows[0];
     },
 
-    // Tạo phiếu mượn mới
     create: async (readerId: number, bookId: number, dueDate: string): Promise<number> => {
         const sql = `
             INSERT INTO borrowings (reader_id, book_id, borrow_date, due_date, status)
@@ -56,7 +52,6 @@ const BorrowModel = {
         return result.insertId;
     },
 
-    // Cập nhật trạng thái (Trả sách)
     updateStatus: async (borrowId: number, status: string, returnDate: Date | null = null): Promise<void> => {
         let sql = `UPDATE borrowings SET status = ?`;
         const params: any[] = [status];

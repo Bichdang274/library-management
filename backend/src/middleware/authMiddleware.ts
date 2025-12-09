@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Định nghĩa lại cấu trúc User trong Token
 interface UserPayload extends JwtPayload {
     id: number;
     role: string;
@@ -15,7 +14,6 @@ export interface AuthRequest extends Request {
     user?: UserPayload;
 }
 
-// 1. Middleware xác thực đăng nhập
 export const verifyToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
     const header = req.headers.authorization;
     if (!header || !header.startsWith("Bearer ")) {
@@ -36,13 +34,10 @@ export const verifyToken = (req: AuthRequest, res: Response, next: NextFunction)
     }
 };
 
-// 2. Middleware chỉ cho phép Admin
 export const verifyAdmin = (req: AuthRequest, res: Response, next: NextFunction): void => {
-    verifyToken(req, res, () => {
-        if (req.user && (req.user.role === "admin" || req.user.role === "manager")) {
-            next();
-        } else {
-            res.status(403).json({ message: "Quyền truy cập bị từ chối (Yêu cầu Admin)" });
-        }
-    });
+    if (req.user && (req.user.role === "admin" || req.user.role === "manager")) {
+        next();
+    } else {
+        res.status(403).json({ message: "Quyền truy cập bị từ chối (Yêu cầu Admin)" });
+    }
 };

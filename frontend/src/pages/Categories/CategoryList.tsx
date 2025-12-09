@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { Category } from '../../types';
 import { getCategories, createCategory, updateCategory, deleteCategory } from '../../services/categoryService';
+import '../../styles/BooksPage.css';
 
 const CategoryList: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -77,7 +78,7 @@ const CategoryList: React.FC = () => {
                     
                     <form onSubmit={handleSubmit}>
                         <div style={{ marginBottom: '15px' }}>
-                            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Tên thể loại *</label>
+                            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '5px', color: '#5d4037' }}>Tên thể loại *</label>
                             <input 
                                 required 
                                 value={name} 
@@ -107,8 +108,22 @@ const CategoryList: React.FC = () => {
                                     <td style={{ padding: '10px' }}>#{cat.category_id}</td>
                                     <td style={{ padding: '10px', fontWeight: 'bold', color: '#3E2723' }}>{cat.category_name}</td>
                                     <td style={{ padding: '10px', textAlign: 'center' }}>
-                                        <button className="btn-action-edit" onClick={() => handleEdit(cat)}>Sửa</button>
-                                        <button className="btn-action-delete" onClick={() => handleDelete(cat.category_id)}>Xóa</button>
+                                        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                                            <button 
+                                                onClick={() => handleEdit(cat)} 
+                                                className="btn-icon edit" 
+                                                title="Sửa"
+                                            >
+                                                ✎
+                                            </button>
+                                            <button 
+                                                onClick={() => handleDelete(cat.category_id)} 
+                                                className="btn-icon delete" 
+                                                title="Xóa"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

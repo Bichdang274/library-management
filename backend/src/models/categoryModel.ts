@@ -3,12 +3,11 @@ import db from '../config/db';
 
 export interface Category extends RowDataPacket {
     category_id: number;
-    category_name: string; // SỬA: Khớp với SQL
+    category_name: string;
 }
 
 const CategoryModel = {
     getAll: async (): Promise<Category[]> => {
-        // SỬA: Lấy category_name
         const [rows] = await db.query<Category[]>('SELECT * FROM categories ORDER BY category_name ASC');
         return rows;
     },
@@ -19,7 +18,6 @@ const CategoryModel = {
     },
 
     create: async (name: string): Promise<number> => {
-        // SỬA: Bỏ description, dùng category_name
         const [result] = await db.query<ResultSetHeader>(
             'INSERT INTO categories (category_name) VALUES (?)',
             [name]
