@@ -1,19 +1,17 @@
-/* --- BIẾN MÀU --- */
 :root {
-  --bg-main: #e6dfcf;        /* nền giấy */
-  --card-bg: #f5f1e8;        /* nền thẻ */
-  --text-main: #281912;      /* chữ nâu đen */
-  --accent-dark: #4e342e;    /* nâu gỗ */
-  --accent-border: #8d6e63;  /* viền nâu nhạt */
-  --table-stripe: #efebe9;   /* dòng chẵn bảng */
-  --danger-red: #c62828;     /* đỏ trầm */
-  --btn-primary: #2563eb;    /* xanh nút chính */
-  --btn-hover: #1d4ed8;
+  --bg-main: #e6dfcf;
+  --card-bg: #f5f1e8;
+  --text-main: #281912;
+  --accent-dark: #4e342e;
+  --accent-border: #8d6e63;
+  --table-stripe: #efebe9;
+  --danger-red: #c62828;
+  --btn-primary: #5d4037;
+  --btn-hover: #3e2723;
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Source Sans 3', sans-serif;
 }
 
-/* --- LAYOUT CHUNG --- */
 .stats-page {
   background-color: var(--bg-main);
   min-height: 100vh;
@@ -34,7 +32,6 @@
   letter-spacing: 1px;
 }
 
-/* --- EXPORT MENU --- */
 .export-menu {
   margin-bottom: 20px;
   position: relative;
@@ -76,7 +73,6 @@
   background: var(--table-stripe);
 }
 
-/* --- STATS ROW --- */
 .stats-row {
   display: flex;
   gap: 20px;
@@ -92,7 +88,7 @@
   padding: 20px;
   width: 200px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06); /* bóng đổ */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .stat-card h3 {
   font-family: var(--font-heading);
@@ -108,7 +104,6 @@
   color: var(--danger-red);
 }
 
-/* --- CHARTS --- */
 .charts-row {
   display: flex;
   flex-wrap: wrap;
@@ -129,7 +124,7 @@
   flex-direction: column;
   justify-content: center;
   box-sizing: border-box;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06); /* bóng đổ */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .chart-box h2 {
@@ -145,9 +140,8 @@
   max-height: 100%;
 }
 
-/* --- TOP LIST --- */
 .top-list {
-  list-style-type: none; /* bỏ dấu chấm */
+  list-style-type: none;
   padding-left: 0;
   margin-top: 10px;
   font-family: var(--font-body);
@@ -157,7 +151,7 @@
 
 .top-list li {
   display: grid;
-  grid-template-columns: 64px 1fr auto; /* rank | title | count */
+  grid-template-columns: 64px 1fr auto;
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
@@ -170,9 +164,9 @@
 }
 
 .top-list li.highlight {
-  background-color: #fff7e6;              /* nền sáng nổi bật */
+  background-color: #fff7e6;
   border-left: 5px solid var(--accent-dark);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.12); /* glow nhẹ */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
   font-weight: 700;
 }
 
@@ -204,7 +198,6 @@
   color: var(--accent-border);
 }
 
-/* --- RESPONSIVE --- */
 @media (max-width: 900px) {
   .stats-row {
     flex-direction: column;

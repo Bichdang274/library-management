@@ -1,7 +1,5 @@
-// frontend/src/services/bookService.ts
 import api from './api';
 
-// Sửa lại: bookData nhận 'any' để chấp nhận cả JSON object
 export const getBooks = async (search = '', category_id = 0) => {
     const params: any = {};
     if (search) params.search = search;
@@ -11,7 +9,6 @@ export const getBooks = async (search = '', category_id = 0) => {
     return res.data; 
 };
 
-// Bỏ kiểu FormData, dùng any để nhận JSON { name, author, image_url... }
 export const createBook = async (bookData: any) => {
     const res = await api.post('/books', bookData);
     return res.data;

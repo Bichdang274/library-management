@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import type { Book, Category } from '../../types';
 import { getBooks, deleteBook } from '../../services/bookService';
 import { getCategories } from '../../services/categoryService';
-
-// SỬA LẠI DÒNG NÀY: Dùng ./BookForm vì file đã nằm cùng thư mục
-import BookForm from './BookForm'; 
+import BookForm from './BookForm';
+import '../../styles/BooksPage.css';
 
 const BookList: React.FC = () => {
     const [books, setBooks] = useState<Book[]>([]);
@@ -53,7 +52,6 @@ const BookList: React.FC = () => {
                 DANH SÁCH & QUẢN LÝ SÁCH
             </h2>
 
-            {/* THANH CÔNG CỤ */}
             <div style={{ display: 'flex', gap: '15px', marginBottom: '20px', alignItems: 'center' }}>
                 <input 
                     type="text" 
@@ -103,10 +101,9 @@ const BookList: React.FC = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {books.map((book: any) => (
+                                {books.map((book: Book) => (
                                     <tr key={book.book_id} style={{ borderBottom: '1px solid #D7CCC8' }}>
                                         <td style={{ padding: '10px' }}>
-                                            {/* HIỂN THỊ ẢNH TỪ URL */}
                                             {book.image_url ? (
                                                 <img 
                                                     src={book.image_url} 
@@ -130,8 +127,22 @@ const BookList: React.FC = () => {
                                             </span>
                                         </td>
                                         <td style={{ padding: '10px', textAlign: 'center' }}>
-                                            <button className="btn-action-edit" onClick={() => setEditingBook(book)}>Sửa</button>
-                                            <button className="btn-action-delete" onClick={() => handleDelete(book.book_id)}>Xóa</button>
+                                            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                                                <button 
+                                                    onClick={() => setEditingBook(book)} 
+                                                    className="btn-icon edit" 
+                                                    title="Sửa"
+                                                >
+                                                    ✎
+                                                </button>
+                                                <button 
+                                                    onClick={() => handleDelete(book.book_id)} 
+                                                    className="btn-icon delete" 
+                                                    title="Xóa"
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

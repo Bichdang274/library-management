@@ -1,12 +1,11 @@
-/* --- Register.css ĐÃ SỬA --- */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
-/* 1. Container bao ngoài cùng */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap');
+
 .fullscreen-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  font-family: Arial, sans-serif;
+  font-family: 'Source Sans 3', sans-serif;
   background-image: url('https://images.spiderum.com/sp-images/05188cf015ad11e7ae28b9f83783eb34.jpg');
   background-size: cover;
   background-position: center;
@@ -19,26 +18,25 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
 }
 
-/* 2. Card chứa cả hai panel - SỬA LẠI KÍCH THƯỚC CỐ ĐỊNH */
 .card-container {
   z-index: 10;
   display: flex;
-  width: 900px;        /* Sửa từ max-width thành width cố định */
-  height: 550px;       /* Sửa từ max-height thành height cố định */
-  max-width: 95%;      /* Giữ lại để responsive trên màn nhỏ */
-  background: rgba(20, 20, 20, 0.85); /* Thêm background giống Login để tránh bị hở màu */
+  width: 900px;
+  height: 550px;
+  max-width: 95%;
+  background: #f5f1e8;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); /* Chỉnh shadow cho giống Login */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  border: 1px solid #8d6e63;
 }
 
-/* 3. Panel bên trái (Hình ảnh) - SỬA TỶ LỆ */
 .image-panel {
-  flex: 1;             /* Thay width: 40% bằng flex: 1 để chia đều 50% */
+  flex: 1;
   background-image: url('https://ghichu.vn/blog/wp-content/uploads/2018/11/a2-1.jpg');
   background-size: cover;
   background-position: center;
@@ -46,7 +44,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px;       /* Chỉnh padding giống Login */
+  padding: 40px;
   color: white;
   text-align: center;
   position: relative;
@@ -59,27 +57,25 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(255, 196, 101, 0.381), rgba(0,0,0,0.7));
+  background: linear-gradient(to bottom, rgba(93, 64, 55, 0.5), rgba(0,0,0,0.7));
   z-index: 1;
 }
 
-/* ... Các class logo, panel-title giữ nguyên ... */
 .logo {
     position: absolute;
     top: 20px;
     left: 20px;
     padding: 5px 10px;
-    z-index: 10; /* Thêm z-index để nổi lên trên lớp phủ */
+    z-index: 10;
 }
 
 .logo-text {
-font-family: 'Cinzel', serif;
+  font-family: 'Playfair Display', serif;
   color: #ffffff; 
   text-transform: uppercase;
   letter-spacing: 3px; 
-  text-shadow: 5px 2px 0px #5d200e;
   font-size: 30px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .panel-title {
@@ -87,6 +83,7 @@ font-family: 'Cinzel', serif;
     font-weight: bold;
     margin-top: 20px;
     z-index: 2;
+    font-family: 'Playfair Display', serif;
 }
 
 .panel-text {
@@ -112,30 +109,28 @@ font-family: 'Cinzel', serif;
     background-color: rgba(255, 255, 255, 0.3);
 }
 
-/* 4. Panel bên phải (Form) - SỬA TỶ LỆ VÀ PADDING */
 .form-panel {
-  flex: 1;             /* Thay width: 50% bằng flex: 1 */
-  background-color: white;
-  padding: 50px;       /* Giảm từ 65px xuống 50px cho bằng Login */
+  flex: 1;
+  background-color: #f5f1e8;
+  padding: 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* Bỏ border-radius thừa vì container đã cắt góc (overflow: hidden) */
 }
 
 .form-title {
   text-align: left;
   color: #5D4037;
-  font-size: 32px;      /* Tăng lên 32px cho bằng Login */
-  margin-bottom: 20px;  /* Tăng margin cho thoáng giống Login */
-  font-weight: 400;
+  font-size: 32px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
 }
 
-/* ... Các phần input, button giữ nguyên ... */
 .register-form {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Tăng khoảng cách một chút */
+    gap: 15px;
 }
 
 .input-group {
@@ -144,25 +139,33 @@ font-family: 'Cinzel', serif;
 }
 
 .label {
-    font-size: 13px; /* Chỉnh lại size cho giống Login */
-    color: #aaa;
+    font-size: 13px;
+    color: #8d6e63;
     margin-bottom: 5px;
-    font-weight: normal;
+    font-weight: bold;
 }
 
 .form-input {
-    padding: 10px 0; /* Đổi style input sang dạng gạch chân giống Login (nếu muốn) hoặc giữ nguyên box */
-    /* Nếu muốn giữ dạng box như cũ thì để lại border, nếu muốn giống login thì đổi thành border-bottom */
-    border: 1px solid #ddd; 
-    border-radius: 4px;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 1px solid #8d6e63;
+    border-radius: 0;
     padding: 12px;
     font-size: 14px;
+    background: transparent;
+    color: #3e2723;
+    font-family: 'Source Sans 3', sans-serif;
+}
+
+.form-input:focus {
+    outline: none;
+    border-bottom: 2px solid #5d4037;
 }
 
 .form-button {
     padding: 12px;
-    background-color: rgb(93,64,55); /* Đồng bộ màu nút */
-    color: rgb(245, 241, 232);
+    background-color: #5d4037;
+    color: #f5f1e8;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -170,7 +173,7 @@ font-family: 'Cinzel', serif;
     margin-top: 20px;
     font-size: 16px;
     display: flex;
-    justify-content: space-between; /* Để mũi tên sang phải */
+    justify-content: space-between;
     align-items: center;
     transition: transform 0.2s;
     padding-left: 20px;
@@ -178,15 +181,14 @@ font-family: 'Cinzel', serif;
 }
 
 .form-button:hover {
-    opacity: 0.9;
+    background-color: #4e342e;
     transform: translateY(-2px);
 }
 
-/* Mobile responsive */
 @media (max-width: 768px) {
     .card-container {
         flex-direction: column;
-        height: auto; /* Trên mobile thì để chiều cao tự động */
+        height: auto;
     }
     .image-panel {
         min-height: 200px;

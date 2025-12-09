@@ -3,11 +3,9 @@ import { useContext } from 'react';
 import type { ReactNode } from 'react'; 
 import React from 'react';
 
-// Import Context
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import type { AuthContextType } from './context/AuthContext';
 
-// Import các trang
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
@@ -18,7 +16,6 @@ import Readers from './pages/Readers';
 import TransactionPage from './pages/TransactionManager/TransactionPage';
 import StatsPage from './pages/StatsPage';
 
-// Định nghĩa Interface
 interface PrivateRouteProps {
     children: ReactNode;
 }
@@ -26,7 +23,6 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     const context = useContext(AuthContext);
     
-    // Kiểm tra an toàn
     if (!context) return <div>Auth Context Error</div>;
     
     const { user, loading } = context as AuthContextType;
@@ -40,11 +36,9 @@ function App() {
         <AuthProvider>
             <Router>
                 <Routes>
-                    {/* Public Routes */}
                     <Route path="/register" element={<Register />} />
                     <Route path="/login" element={<Login />} />
                     
-                    {/* Private Routes */}
                     <Route path="/home" element={
                         <PrivateRoute><Home /></PrivateRoute>
                     } />
@@ -52,7 +46,6 @@ function App() {
                     <Route path="/transactionPage" element={
                         <PrivateRoute><TransactionPage/></PrivateRoute>
                     } />
-
 
                     <Route path="/statsPage" element={
                         <PrivateRoute><StatsPage /></PrivateRoute>

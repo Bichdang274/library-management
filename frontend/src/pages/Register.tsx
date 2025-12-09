@@ -1,9 +1,7 @@
-import { useState,type ChangeEvent,type FormEvent } from 'react';
+import React, { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
-import React from 'react';
 import '../styles/Register.css'; 
-
 
 interface RegisterFormState {
     name: string;
@@ -55,24 +53,17 @@ const Register: React.FC = () => {
             <div className="background-overlay"></div>
             
             <div className="card-container">
-                
-                {/* Phần bên trái: Hình ảnh/Thông điệp */}
                 <div className="image-panel">
                     <div className="logo">
                         <div className="logo-text">LIB</div>
                     </div>
-                    <h2 className="panel-title">
-                        Welcome Back!
-                    </h2>
+                    <h2 className="panel-title">Welcome Back!</h2>
                     <p className="panel-text">
                         Đã có tài khoản? Đăng nhập để sử dụng các tính năng của chúng tôi.
                     </p>
-                    <Link to="/login" className="link-button">
-                        Đăng nhập
-                    </Link>
+                    <Link to="/login" className="link-button">Đăng nhập</Link>
                 </div>
                 
-                {/* Phần bên phải: Form Đăng Ký */}
                 <div className="form-panel">
                     <h2 className="form-title">Đăng Ký Tài Khoản</h2>
                     

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from "../../styles/TransactionPage.module.css";
 
-
-// 1. Định nghĩa kiểu dữ liệu cho Phiếu Mượn (Loan)
 interface Loan {
   borrow_id: number;
   reader_id: number;
@@ -16,18 +14,14 @@ interface Loan {
 }
 
 const TransactionPage = () => {
-  // State chuyển tab
   const [activeTab, setActiveTab] = useState('borrow');
   
-  // State dữ liệu
   const [formData, setFormData] = useState({ reader_id: '', book_id: '', due_date: '' });
   
-  // 2. Sửa lỗi 'never': Khai báo rõ state này chứa mảng các Loan
   const [activeLoans, setActiveLoans] = useState<Loan[]>([]);
   
   const [message, setMessage] = useState({ text: '', type: '' });
 
-  // Hàm lấy danh sách đang mượn
   const fetchActiveLoans = async () => {
     try {
       const res = await axios.get('http://localhost:5000/api/transactions/active');
@@ -43,12 +37,10 @@ const TransactionPage = () => {
     }
   }, [activeTab]);
 
-  // 3. Sửa lỗi 'any' cho sự kiện onChange
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // 4. Sửa lỗi 'any' cho sự kiện onSubmit
   const handleBorrow = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage({ text: '', type: '' });
@@ -56,7 +48,7 @@ const TransactionPage = () => {
       await axios.post('http://localhost:5000/api/transactions/borrow', formData);
       setMessage({ text: 'Tạo phiếu mượn thành công!', type: 'success' });
       setFormData({ reader_id: '', book_id: '', due_date: '' });
-    } catch (error: any) { // 5. Sửa lỗi 'unknown': gán kiểu any cho error để lấy response
+    } catch (error: any) { 
       setMessage({ 
         text: error.response?.data?.message || 'Có lỗi xảy ra', 
         type: 'error' 
@@ -64,9 +56,8 @@ const TransactionPage = () => {
     }
   };
 
-  // 6. Sửa lỗi 'any' cho tham số hàm
   const handleReturn = async (borrow_id: number, book_id: number) => {
-    if (!window.confirm("Xác nhận nhận lại sách này?")) return;
+    if (!window.confirm("Xác trả lại sách này?")) return;
     try {
       await axios.post('http://localhost:5000/api/transactions/return', { borrow_id, book_id });
       fetchActiveLoans();
@@ -78,7 +69,6 @@ const TransactionPage = () => {
 
   return (
     <div className={styles.container}>
-      {/* --- Sidebar Menu --- */}
       <div className={styles.sidebar}>
         <div className={styles.sidebarTitle}>Nghiệp Vụ</div>
         
@@ -97,7 +87,6 @@ const TransactionPage = () => {
         </button>
       </div>
 
-      {/* --- Main Content --- */}
       <div className={styles.mainContent}>
         
         <div className={styles.pageHeader}>
@@ -119,7 +108,6 @@ const TransactionPage = () => {
           </div>
         )}
 
-        {/* --- GIAO DIỆN 1: FORM MƯỢN SÁCH --- */}
         {activeTab === 'borrow' && (
           <div className={styles.cardForm}>
             <div className={styles.cardTitle}>Thông Tin Phiếu Mượn</div>
@@ -169,7 +157,6 @@ const TransactionPage = () => {
           </div>
         )}
 
-        {/* --- GIAO DIỆN 2: BẢNG TRẢ SÁCH --- */}
         {activeTab === 'return' && (
           <div className={styles.tableContainer}>
             <table className={styles.table}>
@@ -187,7 +174,6 @@ const TransactionPage = () => {
               <tbody>
                 {activeLoans.length === 0 ? (
                   <tr>
-                    {/* 7. Sửa lỗi colSpan: dùng số {7} thay vì chuỗi "7" */}
                     <td colSpan={7} style={{textAlign: 'center', fontStyle: 'italic', padding: '30px'}}>
                       Hiện không có sách nào đang được mượn.
                     </td>

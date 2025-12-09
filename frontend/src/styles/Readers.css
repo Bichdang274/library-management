@@ -1,24 +1,20 @@
-/* --- BIẾN MÀU (Đồng bộ với Management.css) --- */
 :root {
-    --paper-bg: #e6dfcf;       /* Nền giấy cũ */
-    --card-bg: #f5f1e8;        /* Nền thẻ sáng hơn chút */
-    --dark-brown: #3e2723;     /* Nâu đen (Text chính) */
-    --wood-brown: #5d4037;     /* Nâu gỗ (Header bảng) */
-    --accent-brown: #8d6e63;   /* Nâu nhạt (Viền) */
-    --gold-text: #ffecb3;      /* Màu chữ vàng nhạt cho header tối */
-    --table-stripe: #efebe9;   /* Màu dòng chẵn của bảng */
-    --danger-red: #c62828;     /* Đỏ trầm */
+    --paper-bg: #e6dfcf;
+    --card-bg: #f5f1e8;
+    --dark-brown: #3e2723;
+    --wood-brown: #5d4037;
+    --accent-brown: #8d6e63;
+    --gold-text: #ffecb3;
+    --table-stripe: #efebe9;
+    --danger-red: #c62828;
 }
 
-/* --- LAYOUT CHUNG --- */
 .readers-page {
-    /* Kế thừa background từ management-container nhưng thêm padding */
     padding: 50px 40px;
     font-family: 'Source Sans 3', sans-serif;
     color: var(--dark-brown);
 }
 
-/* --- HEADER RIÊNG CỦA TRANG --- */
 .page-header {
     display: flex;
     justify-content: space-between;
@@ -64,23 +60,20 @@
     color: #fff;
 }
 
-/* --- CONTENT LAYOUT (FORM & TABLE) --- */
 .readers-content {
     display: grid;
-    grid-template-columns: 350px 1fr; /* Form cố định 350px, Bảng chiếm phần còn lại */
+    grid-template-columns: 350px 1fr;
     gap: 30px;
 }
 
-/* Card Style Vintage (Dùng chung cho Form và Table wrapper) */
 .vintage-card {
     background: var(--card-bg);
     border: 1px solid var(--accent-brown);
     padding: 20px;
-    box-shadow: 4px 4px 0px rgba(62, 39, 35, 0.2); /* Bóng cứng kiểu cũ */
+    box-shadow: 4px 4px 0px rgba(62, 39, 35, 0.2);
     position: relative;
 }
 
-/* --- FORM STYLING --- */
 .form-section h3 {
     font-family: 'Playfair Display', serif;
     margin-top: 0;
@@ -116,11 +109,10 @@
 
 .form-group input:focus {
     border-color: var(--wood-brown);
-    background: #fffcf5; /* Hơi vàng khi focus */
+    background: #fffcf5;
     box-shadow: 2px 2px 0px rgba(93, 64, 55, 0.1);
 }
 
-/* Buttons Form */
 .form-actions {
     margin-top: 10px;
     display: flex;
@@ -158,7 +150,6 @@
     background: #efebe9;
 }
 
-/* --- TABLE STYLING --- */
 .vintage-table {
     width: 100%;
     border-collapse: collapse;
@@ -185,16 +176,14 @@
     vertical-align: middle;
 }
 
-/* Zebra Striping (Dòng kẻ sọc) */
 .vintage-table tbody tr:nth-child(even) {
     background-color: var(--table-stripe);
 }
 
 .vintage-table tbody tr:hover {
-    background-color: #e0dbd5; /* Highlight khi di chuột */
+    background-color: #e0dbd5;
 }
 
-/* Cột ID và Tên */
 .id-col {
     font-family: monospace;
     color: var(--accent-brown);
@@ -208,7 +197,6 @@
     font-size: 1.05rem;
 }
 
-/* Nút thao tác trong bảng */
 .action-col {
     display: flex;
     gap: 8px;
@@ -253,11 +241,9 @@
     color: var(--accent-brown);
 }
 
-
-/* --- RESPONSIVE --- */
 @media (max-width: 900px) {
     .readers-content {
-        grid-template-columns: 1fr; /* Chuyển thành 1 cột trên màn nhỏ */
+        grid-template-columns: 1fr;
     }
     
     .form-section {

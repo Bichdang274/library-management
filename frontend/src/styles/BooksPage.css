@@ -1,20 +1,258 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap');
+
+:root {
+  --paper-bg: #e6dfcf;
+  --card-bg: #f5f1e8;
+  --wood-brown: #5d4037;
+  --accent-brown: #8d6e63;
+  --text-ink: #281912;
+  --gold-text: #ffecb3;
+  --table-stripe: #efebe9;
+  --danger-red: #c62828;
+  --success-green: #2e7d32;
+}
+
+.books-page {
+  min-height: 100vh;
+  background-color: var(--paper-bg);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+  padding: 40px;
+  font-family: 'Source Sans 3', sans-serif;
+  color: var(--text-ink);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--wood-brown);
+  padding-bottom: 15px;
+}
+
+.page-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--wood-brown);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  background: var(--card-bg);
+  padding: 15px;
+  border: 1px solid var(--accent-brown);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px rgba(93, 64, 55, 0.1);
+}
+
+.search-input, .category-select {
+  padding: 10px;
+  border: 1px solid var(--accent-brown);
+  background: #fff;
+  font-family: 'Source Sans 3', sans-serif;
+  color: var(--text-ink);
+  outline: none;
+}
+
+.search-input {
+  flex: 1;
+}
+
+.search-input:focus, .category-select:focus {
+  border-color: var(--wood-brown);
+  background-color: #fffcf5;
+}
+
+.btn-add {
+  background-color: var(--wood-brown);
+  color: #fff;
+  border: 1px solid var(--wood-brown);
+  padding: 10px 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add:hover {
+  background-color: var(--text-ink);
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}
+
+.books-table-container {
+  background: var(--card-bg);
+  border: 1px solid var(--accent-brown);
+  padding: 5px;
+  box-shadow: 4px 4px 0px rgba(62, 39, 35, 0.15);
+}
+
 .books-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff;
 }
 
-.books-table th,
-.books-table td {
-  border: 1px solid #ddd;
-  padding: 10px 14px;
-  text-align: left;
+.books-table thead tr {
+  background-color: var(--wood-brown);
+  color: var(--gold-text);
 }
 
 .books-table th {
-  background-color: #eaeaea;
+  padding: 15px;
+  text-align: left;
+  font-family: 'Playfair Display', serif;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 3px solid var(--text-ink);
 }
 
-.books-table tr:hover {
-  background-color: #f9f9f9;
+.books-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #d7ccc8;
+  vertical-align: middle;
+}
+
+.books-table tbody tr:nth-child(even) {
+  background-color: var(--table-stripe);
+}
+
+.books-table tbody tr:hover {
+  background-color: #e0dbd5;
+}
+
+.book-cover-cell img {
+  width: 50px;
+  height: 70px;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.book-title-cell {
+  font-family: 'Playfair Display', serif;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--wood-brown);
+}
+
+.stock-badge {
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.in-stock {
+  color: var(--success-green);
+  background-color: #e8f5e9;
+  border: 1px solid #c8e6c9;
+}
+.out-of-stock {
+  color: var(--danger-red);
+  background-color: #ffebee;
+  border: 1px solid #ffcdd2;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 30px;
+  height: 30px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-edit {
+  color: var(--wood-brown);
+  border-color: var(--accent-brown);
+}
+.btn-edit:hover {
+  background-color: var(--wood-brown);
+  color: #fff;
+}
+
+.btn-delete {
+  color: var(--danger-red);
+  border-color: #ef9a9a;
+}
+.btn-delete:hover {
+  background-color: var(--danger-red);
+  color: #fff;
+}
+
+.vintage-card {
+  background: var(--card-bg);
+  border: 1px solid var(--accent-brown);
+  padding: 25px;
+  box-shadow: 4px 4px 0px rgba(62, 39, 35, 0.2);
+  border-radius: 4px;
+  color: var(--text-ink);
+}
+
+.vintage-title {
+  font-family: 'Playfair Display', serif;
+  color: var(--wood-brown) !important;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-bottom: 1px dashed var(--accent-brown);
+  padding-bottom: 10px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--wood-brown);
+  color: #fff;
+  border: 1px solid var(--wood-brown);
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+
+.btn-submit:hover {
+  background-color: var(--text-ink);
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}
+
+.btn-cancel {
+  background-color: transparent;
+  border: 1px solid var(--wood-brown);
+  color: var(--wood-brown);
+  padding: 6px 15px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background-color: var(--wood-brown);
+  color: #fff;
 }

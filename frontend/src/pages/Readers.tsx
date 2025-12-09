@@ -1,9 +1,7 @@
-import { useEffect, useState, useContext, type FormEvent } from 'react';
+import React, { useEffect, useState, useContext, type FormEvent } from 'react';
 import api from '../services/api';
-import { AuthContext,type AuthContextType } from '../context/AuthContext';
+import { AuthContext, type AuthContextType } from '../context/AuthContext';
 import '../styles/Readers.css';
-import React from 'react';
-
 
 interface Reader {
     reader_id?: number | string;
@@ -14,7 +12,6 @@ interface Reader {
     address: string | null;
     quota: number | string | null; 
 }
-
 
 interface ReaderFormState {
     name: string;
@@ -43,22 +40,21 @@ const Readers: React.FC = () => {
     const fetchReaders = async () => {
         try {
             const res = await api.get('/readers');
-            
             let data: Reader[] = [];
             if (res.data && Array.isArray(res.data.data)) {
-                data = res.data.data as Reader[];
+                data = res.data.data;
             } else if (Array.isArray(res.data)) {
-                data = res.data as Reader[];
+                data = res.data;
             }
-            
             setReaders(data);
         } catch (err) {
-            console.error("Lỗi tải dữ liệu:", err);
+            console.error(err);
             setReaders([]); 
         }
     };
 
     useEffect(() => { fetchReaders(); }, []);
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
@@ -77,12 +73,12 @@ const Readers: React.FC = () => {
             setEditingId(null);
             fetchReaders();
         } catch (err: any) {
-            alert('Lỗi: ' + (err.response?.data?.message || err.message));
+            alert(err.response?.data?.message || err.message);
         }
     };
+
     const handleDelete = async (id: number | string | undefined) => {
         if (!id) return; 
-
         if(window.confirm('Bạn có chắc muốn xóa bạn đọc này?')) {
             try {
                 await api.delete(`/readers/${id}`);
@@ -112,7 +108,6 @@ const Readers: React.FC = () => {
 
     return (
         <div className="readers-page management-container">
-            
             <div className="page-header">
                 <div className="header-title">
                     <h2>Danh Sách Bạn Đọc</h2>
@@ -125,8 +120,6 @@ const Readers: React.FC = () => {
             </div>
             
             <div className="readers-content">
-                
-                {/* FORM SECTION */}
                 <div className="form-section vintage-card">
                     <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px', textShadow: 'none' }}>
                         <span>{editingId ? '🖊️' : '➕'}</span>
@@ -141,7 +134,6 @@ const Readers: React.FC = () => {
                             <label>Email liên hệ <span style={{color:'red'}}>*</span></label>
                             <input type="email" placeholder="email@domain.com" value={form.email} onChange={e => setForm({...form, email: e.target.value})} required />
                         </div>
-
 
                         {!editingId && (
                             <div className="form-group">
@@ -176,7 +168,6 @@ const Readers: React.FC = () => {
                     </form>
                 </div>
 
-                {/* TABLE SECTION */}
                 <div className="table-section vintage-card">
                     <table className="vintage-table">
                         <thead>

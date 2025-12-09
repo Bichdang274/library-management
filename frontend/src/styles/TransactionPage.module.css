@@ -1,25 +1,21 @@
-/* TransactionPage.module.css */
-
-/* --- Cấu hình màu sắc (Theme Vintage) --- */
 :root {
-  --bg-color: #fdfbf7;        /* Màu nền kem sáng */
-  --primary-brown: #4e342e;   /* Màu nâu đậm (Header bảng, nút chính) */
-  --text-primary: #3e2723;    /* Màu chữ chính */
-  --border-color: #d7ccc8;    /* Màu viền nhạt */
-  --input-bg: #fff;           /* Nền ô nhập liệu */
-  --accent-gold: #ffecb3;     /* Màu nhấn nhẹ */
-  --danger-red: #d32f2f;      /* Màu đỏ cho nút xóa/hủy */
+  --bg-color: #fdfbf7;
+  --primary-brown: #4e342e;
+  --text-primary: #3e2723;
+  --border-color: #d7ccc8;
+  --input-bg: #fff;
+  --accent-gold: #ffecb3;
+  --danger-red: #d32f2f;
 }
 
 .container {
   display: flex;
   min-height: 100vh;
-  background-color: var(--bg-color); /* Nền toàn trang màu kem */
-  font-family: 'Times New Roman', serif; /* Font chữ kiểu cổ điển/trang trọng */
+  background-color: var(--bg-color);
+  font-family: 'Times New Roman', serif;
   color: var(--text-primary);
 }
 
-/* --- Sidebar bên trái (Menu chọn chức năng) --- */
 .sidebar {
   width: 250px;
   background-color: #f4eee0;
@@ -66,7 +62,6 @@
   box-shadow: 0 4px 6px rgba(78, 52, 46, 0.3);
 }
 
-/* --- Nội dung chính bên phải --- */
 .mainContent {
   flex: 1;
   padding: 40px;
@@ -91,14 +86,13 @@
   margin-top: 5px;
 }
 
-/* --- Card chứa Form (Giống ảnh 1) --- */
 .cardForm {
-  background-color: #fff8e1; /* Màu nền vàng rất nhạt */
+  background-color: #fff8e1;
   border: 1px solid var(--primary-brown);
   padding: 30px;
   width: 100%;
   max-width: 500px;
-  margin: 0 auto; /* Căn giữa */
+  margin: 0 auto;
   box-shadow: 5px 5px 0px rgba(78, 52, 46, 0.1);
 }
 
@@ -128,7 +122,7 @@
   width: 100%;
   padding: 10px;
   border: 1px solid var(--border-color);
-  border-radius: 0; /* Vuông vức theo phong cách cổ điển */
+  border-radius: 0;
   background-color: #fff;
   font-size: 1rem;
   color: var(--text-primary);
@@ -157,7 +151,6 @@
   opacity: 0.9;
 }
 
-/* --- Bảng Danh Sách (Giống ảnh 2) --- */
 .tableContainer {
   background-color: white;
   border: 1px solid var(--border-color);

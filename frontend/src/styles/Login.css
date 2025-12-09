@@ -1,5 +1,4 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap');
 
 * {
   box-sizing: border-box;
@@ -8,7 +7,7 @@
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Source Sans 3', sans-serif;
 }
 
 .login-page {
@@ -29,25 +28,24 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
   z-index: 0;
 }
-
 
 .login-container {
   display: flex;
   width: 900px;
   max-width: 95%;
   height: 550px;
-  background: rgba(20, 20, 20, 0.85);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  background: #f5f1e8;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   overflow: hidden;
   z-index: 1;
   position: relative;
+  border: 1px solid #8d6e63;
 }
-
 
 .left-panel {
   flex: 1;
@@ -69,7 +67,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(255, 196, 101, 0.381), rgba(0,0,0,0.7));
+  background: linear-gradient(to bottom, rgba(93, 64, 55, 0.5), rgba(0,0,0,0.7));
   z-index: 1;
 }
 
@@ -83,30 +81,19 @@ body {
 }
 
 .welcome-text h2 {
+  font-family: 'Playfair Display', serif;
   font-size: 32px;
   margin-bottom: 10px;
   line-height: 1.2;
+  color: #fff;
 }
 
 .welcome-text p {
   font-size: 14px;
-  opacity: 0.8;
+  opacity: 0.9;
   margin-bottom: 20px;
-}
-
-.social-icons span {
-  margin-right: 15px;
-  font-size: 18px;
-  cursor: pointer;
-  opacity: 0.7;
-  transition: 0.3s;
-}
-
-.social-icons span:hover {
-  opacity: 1;
   color: #fff;
 }
-
 
 .right-panel {
   flex: 1;
@@ -114,15 +101,16 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #ffffff;
-  color: rgb(83, 47, 0);
-
+  background-color: #f5f1e8;
+  color: #5d4037;
 }
 
 .right-panel h2 {
+  font-family: 'Playfair Display', serif;
   font-size: 32px;
-  font-weight: 400;
+  font-weight: 700;
   margin-bottom: 40px;
+  color: #5d4037;
 }
 
 .form-group {
@@ -132,56 +120,40 @@ body {
 
 .form-group label {
   font-size: 13px;
-  color: #aaa;
+  color: #8d6e63;
   display: block;
   margin-bottom: 5px;
+  font-weight: bold;
 }
-
 
 .form-group input {
   width: 100%;
   padding: 10px 0;
   background: transparent;
   border: none;
-  border-bottom: 1px solid #555;
-  color: rgb(0, 0, 0);
+  border-bottom: 1px solid #8d6e63;
+  color: #3e2723;
   font-size: 16px;
   outline: none;
   transition: border-color 0.3s;
+  font-family: 'Source Sans 3', sans-serif;
 }
 
 .form-group input:focus {
-  border-bottom: 1px solid #e50914; 
+  border-bottom: 2px solid #5d4037; 
 }
 
 .form-group input::placeholder {
-  color: #666;
+  color: #a1887f;
   font-size: 14px;
 }
-
-
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  font-size: 13px;
-  color: #aaa;
-}
-
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
 
 .submit-btn {
   width: 100%;
   padding: 12px;
-  background-color: rgb(93,64,55);
+  background-color: #5d4037;
   border: none;
-  color: rgb(245, 241, 232);
+  color: #f5f1e8;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -195,14 +167,14 @@ body {
 }
 
 .submit-btn:hover {
-  opacity: 0.9;
+  background-color: #4e342e;
   transform: translateY(-2px);
 }
 
 .switch-auth {
   margin-left: auto;
   font-size: 14px;
-  color: #aaa;
+  color: #e6dfcf;
   text-decoration: none;
   border-bottom: 1px solid transparent;
 }
@@ -213,22 +185,19 @@ body {
 }
 
 .error-msg {
-  color: #ff4d4d;
+  color: #c62828;
   font-size: 14px;
   margin-bottom: 15px;
 }
 
-
-
-.brand{
+.brand {
     display: flex;
 }
 
-h3{
-font-family: 'Cinzel', serif;
+h3 {
+  font-family: 'Playfair Display', serif;
   color: #ffffff; 
   text-transform: uppercase;
   letter-spacing: 3px; 
-  text-shadow: 5px 2px 0px #5d200e;
   font-size: 30px;
 }

@@ -19,21 +19,15 @@ const Login = () => {
         setError('');
         
         try {
-            // Gọi hàm login, nhận lại object User
             const loggedInUser = await login(form.email, form.password);
             
-            // FIX LỖI TYPESCRIPT & LOGIC ĐIỀU HƯỚNG
             if (loggedInUser) {
-                // Kiểm tra role trực tiếp từ object user
                 if (loggedInUser.role === 'admin') {
-                    console.log("Là Admin/Manager -> Chuyển hướng Management");
-                    navigate('/Management');
+                    navigate('/management');
                 } else if (loggedInUser.role === 'reader') {
-                    console.log("Là Reader -> Chuyển hướng Home");
-                    navigate('/Home');
+                    navigate('/home');
                 } else {
-                    // Fallback nếu không có role
-                    navigate('/Home');
+                    navigate('/home');
                 }
             } else {
                 setError('Không nhận được dữ liệu phản hồi.');
@@ -45,7 +39,6 @@ const Login = () => {
         }
     };
 
-    // ... (Phần return JSX giữ nguyên như code cũ của bạn)
     return (
         <div className="login-page">
             <div className="login-container">

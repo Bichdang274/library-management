@@ -63,8 +63,8 @@ const CategoryList: React.FC = () => {
     return (
         <div style={{ padding: '20px' }}>
              <h2 className="vintage-title" style={{ borderBottom: '2px solid #5D4037', paddingBottom: '10px', marginBottom: '20px' }}>
-                QUẢN LÝ THỂ LOẠI
-            </h2>
+                 QUẢN LÝ THỂ LOẠI
+             </h2>
 
             <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '30px' }}>
                 <div className="vintage-card" style={{ height: 'fit-content' }}>

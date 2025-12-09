@@ -1,8 +1,8 @@
-// frontend/src/pages/Books/BookForm.tsx
 import React, { useEffect, useState } from 'react';
 import { getCategories } from '../../services/categoryService';
 import { createBook, updateBook } from '../../services/bookService';
 import type { Category, Book } from '../../types';
+import '../../styles/BooksPage.css';
 
 interface Props {
     onSuccess: () => void;
@@ -33,7 +33,7 @@ const BookForm: React.FC<Props> = ({ onSuccess, initialData, onCancel }) => {
                 name: initialData.name,
                 author: initialData.author || '',
                 publisher: initialData.publisher || '',
-                year_published: initialData.year_published || new Date().getFullYear(),
+                year_published: Number(initialData.year_published) || new Date().getFullYear(),
                 category_id: initialData.category_id,
                 total_copies: initialData.total_copies,
                 image_url: initialData.image_url || ''
@@ -56,7 +56,10 @@ const BookForm: React.FC<Props> = ({ onSuccess, initialData, onCancel }) => {
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const value = (e.target.type === 'number' || e.target.name === 'category_id') 
+            ? Number(e.target.value) 
+            : e.target.value;
+        setFormData({ ...formData, [e.target.name]: value });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
