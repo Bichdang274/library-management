@@ -137,36 +137,36 @@ const Home: React.FC = () => {
 
     const styles = {
         gridContainer: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '25px', padding: '20px 0' },
-        bookCard: { cursor: 'pointer', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', backgroundColor: '#FAF8F1', height: '320px', border: '1px solid #8D6E63', display: 'flex', flexDirection: 'column' as const }, // Sửa màu nền và viền
+        bookCard: { cursor: 'pointer', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', backgroundColor: '#FAF8F1', height: '320px', border: '1px solid #8D6E63', display: 'flex', flexDirection: 'column' as const },
         bookImage: { width: '100%', height: '200px', objectFit: 'cover' as const },
         bookInfo: { padding: '10px', flex: 1, display: 'flex', flexDirection: 'column' as const, justifyContent: 'space-between' },
         modalOverlay: { position: 'fixed' as const, top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.75)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 },
-        modalContent: { backgroundColor: '#F5F5DC', borderRadius: '12px', width: '90%', maxWidth: '800px', maxHeight: '90vh', overflowY: 'auto' as const, padding: '20px', position: 'relative' as const, border: '3px double #795548' }, // Sửa màu nền modal và viền
+        modalContent: { backgroundColor: '#F5F5DC', borderRadius: '12px', width: '90%', maxWidth: '800px', maxHeight: '90vh', overflowY: 'auto' as const, padding: '20px', position: 'relative' as const, border: '3px double #795548' },
         closeBtn: { position: 'absolute' as const, top: '10px', right: '15px', border: 'none', background: 'none', fontSize: '24px', cursor: 'pointer', color:'#999' },
         table: { width: '100%', borderCollapse: 'collapse' as const, marginTop: '10px' },
-        th: { backgroundColor: '#8D6E63', padding: '12px', borderBottom: '2px solid #dee2e6', textAlign: 'left' as const, color: '#FAF8F1' }, // Sửa màu nền tiêu đề bảng
+        th: { backgroundColor: '#8D6E63', padding: '12px', borderBottom: '2px solid #dee2e6', textAlign: 'left' as const, color: '#FAF8F1' },
         td: { padding: '12px', borderBottom: '1px solid #dee2e6' },
         btnAction: { padding: '8px 16px', borderRadius: '4px', border: 'none', cursor: 'pointer', fontWeight: 'bold' as const, color: 'white' }
     };
 
     return (
         <div className="container">
-            <div className="header" style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'15px 30px', backgroundColor:'#5D4037', boxShadow:'0 2px 4px rgba(0,0,0,0.1)'}}> {/* Sửa màu nền */}
+            <div className="header" style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'15px 30px', backgroundColor:'#5D4037', boxShadow:'0 2px 4px rgba(0,0,0,0.1)'}}>
                 <div style={{display:'flex', alignItems:'center', gap:'20px'}}>
-                    <h2 style={{margin:0, color:'#FAF8F1', fontFamily: 'Playfair Display, serif'}}>LIB</h2> {/* Sửa màu chữ và font */}
+                    <h2 style={{margin:0, color:'#FAF8F1', fontFamily: 'Playfair Display, serif'}}>LIB</h2>
                     <div style={{display:'flex', gap:'15px'}}>
-                        <button onClick={() => setShowCart(true)} className="header-btn"> {/* Thêm class CSS cho styling */}
-                            🛒 Giỏ sách (<b style={{color:'#FAF8F1'}}>{cart.length}</b>) {/* Sửa màu chữ */}
+                        <button onClick={() => setShowCart(true)} className="header-btn">
+                            🛒 Giỏ sách (<b style={{color:'#5D4037'}}>{cart.length}</b>)
                         </button>
-                        <button onClick={() => setShowHistory(true)} className="header-btn"> {/* Thêm class CSS cho styling */}
+                        <button onClick={() => setShowHistory(true)} className="header-btn">
                             📜 Lịch sử
                         </button>
                     </div>
                 </div>
                 
                 <div className="user-control">
-                    <span style={{marginRight: '15px', color:'#FAF8F1'}}>Xin chào, <b>{user?.name}</b></span> {/* Sửa màu chữ */}
-                    <button onClick={logout} className="btn-logout">Đăng xuất</button> {/* Sẽ được định nghĩa trong Home.css */}
+                    <span style={{marginRight: '15px', color:'#FAF8F1'}}>Xin chào, <b>{user?.name}</b></span>
+                    <button onClick={logout} className="btn-logout">Đăng xuất</button>
                 </div>
             </div>
 
@@ -175,12 +175,12 @@ const Home: React.FC = () => {
                 <h3 className="section-title" style={{color:'#5D4037', marginTop:'30px', fontFamily: 'Playfair Display, serif'}}>THỐNG KÊ NỔI BẬT</h3> 
                 <div className="charts-row" style={{display:'flex', gap:'25px', marginBottom:'30px'}}> 
                     
-                    <div className="chart-box" style={{flex:1, padding:'20px', borderRadius:'8px', backgroundColor:'#FAF8F1', boxShadow:'2px 2px 4px rgba(93, 64, 55, 0.2)', border: '1px solid #8D6E63'}}> {/* Sửa style box */}
+                    <div className="chart-box" style={{flex:1, padding:'20px', borderRadius:'8px', backgroundColor:'#FAF8F1', boxShadow:'2px 2px 4px rgba(93, 64, 55, 0.2)', border: '1px solid #8D6E63'}}>
                         <h2 style={{color:'#4E342E', marginTop:0, fontFamily: 'Playfair Display, serif'}}>Top 5 Sách Hot</h2>
                         <ul className="top-list" style={{listStyle:'none', padding:0}}>
                             {topBooks.length === 0 ? <p style={{color:'#795548'}}>Đang tải...</p> : topBooks.map((book, idx) => (
                                 <li key={idx} className={idx === 0 ? 'highlight' : ''} style={{padding:'10px 0', borderBottom:'1px dotted #ccc', display:'flex', justifyContent:'space-between', alignItems:'center', fontWeight: idx === 0 ? 'bold' : 'normal'}}>
-                                    <span className={idx === 0 ? 'rank-badge' : 'rank'} style={{backgroundColor: idx === 0 ? '#8D6E63' : 'transparent', color: idx === 0 ? '#FAF8F1' : '#212121', padding: '2px 8px', borderRadius: '4px', marginRight: '10px'}}>{`#${idx + 1}`}</span> {/* Sửa màu rank */}
+                                    <span className={idx === 0 ? 'rank-badge' : 'rank'} style={{backgroundColor: idx === 0 ? '#8D6E63' : 'transparent', color: idx === 0 ? '#FAF8F1' : '#212121', padding: '2px 8px', borderRadius: '4px', marginRight: '10px'}}>{`#${idx + 1}`}</span>
                                     <span className="item-title" style={{flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{book.title}</span>
                                     <span className="item-count" style={{color:'#4E342E'}}>{book.borrow_count} lượt</span>
                                 </li>
@@ -188,12 +188,12 @@ const Home: React.FC = () => {
                         </ul>
                     </div>
 
-                    <div className="chart-box" style={{flex:1, padding:'20px', borderRadius:'8px', backgroundColor:'#FAF8F1', boxShadow:'2px 2px 4px rgba(93, 64, 55, 0.2)', border: '1px solid #8D6E63'}}> {/* Sửa style box */}
+                    <div className="chart-box" style={{flex:1, padding:'20px', borderRadius:'8px', backgroundColor:'#FAF8F1', boxShadow:'2px 2px 4px rgba(93, 64, 55, 0.2)', border: '1px solid #8D6E63'}}>
                         <h2 style={{color:'#4E342E', marginTop:0, fontFamily: 'Playfair Display, serif'}}>Top 5 Mọt Sách</h2>
                         <ul className="top-list" style={{listStyle:'none', padding:0}}>
                             {topReaders.length === 0 ? <p style={{color:'#795548'}}>Đang tải...</p> : topReaders.map((reader, idx) => (
                                 <li key={idx} className={idx === 0 ? 'highlight' : ''} style={{padding:'10px 0', borderBottom:'1px dotted #ccc', display:'flex', justifyContent:'space-between', alignItems:'center', fontWeight: idx === 0 ? 'bold' : 'normal'}}>
-                                    <span className={idx === 0 ? 'rank-badge' : 'rank'} style={{backgroundColor: idx === 0 ? '#8D6E63' : 'transparent', color: idx === 0 ? '#FAF8F1' : '#212121', padding: '2px 8px', borderRadius: '4px', marginRight: '10px'}}>{`#${idx + 1}`}</span> {/* Sửa màu rank */}
+                                    <span className={idx === 0 ? 'rank-badge' : 'rank'} style={{backgroundColor: idx === 0 ? '#8D6E63' : 'transparent', color: idx === 0 ? '#FAF8F1' : '#212121', padding: '2px 8px', borderRadius: '4px', marginRight: '10px'}}>{`#${idx + 1}`}</span>
                                     <span className="item-title" style={{flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{reader.reader}</span>
                                     <span className="item-count" style={{color:'#4E342E'}}>{reader.borrow_count} lượt</span>
                                 </li>
@@ -222,10 +222,10 @@ const Home: React.FC = () => {
                                 <div style={styles.bookInfo}>
                                     <div>
                                         <div style={{fontWeight:'bold', marginBottom:'5px', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', color:'#212121'}} title={book.name}>{book.name}</div>
-                                        <div style={{fontSize:'12px', color:'#795548'}}>{book.author}</div> {/* Sửa màu tác giả */}
+                                        <div style={{fontSize:'12px', color:'#795548'}}>{book.author}</div>
                                     </div>
                                     <div style={{marginTop:'10px', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                                        <span style={{fontSize:'12px', color: book.available_copies > 0 ? '#4E342E' : '#999'}}> {/* Sửa màu kho */}
+                                        <span style={{fontSize:'12px', color: book.available_copies > 0 ? '#4E342E' : '#999'}}>
                                             Kho: {book.available_copies}
                                         </span>
                                         <button 
@@ -233,7 +233,7 @@ const Home: React.FC = () => {
                                             disabled={book.available_copies === 0}
                                             style={{
                                                 padding:'5px 10px', 
-                                                backgroundColor: book.available_copies > 0 ? '#5D4037' : '#BCAAA4', /* Sửa màu nút */
+                                                backgroundColor: book.available_copies > 0 ? '#5D4037' : '#BCAAA4',
                                                 color:'white', border:'none', borderRadius:'4px', cursor: book.available_copies > 0 ? 'pointer' : 'not-allowed',
                                                 fontWeight:'bold'
                                             }}
@@ -288,7 +288,7 @@ const Home: React.FC = () => {
                                         onClick={handleCheckout}
                                         style={{
                                             padding:'12px 24px', 
-                                            backgroundColor:'#5D4037', /* Sửa màu nút */
+                                            backgroundColor:'#5D4037',
                                             color:'white', 
                                             border:'none', 
                                             borderRadius:'6px', 
@@ -337,7 +337,6 @@ const Home: React.FC = () => {
                                             <td style={styles.td}>
                                                 <span className={`status-badge status-${tx.status}`} style={{
                                                     padding:'4px 8px', borderRadius:'12px', fontSize:'12px', fontWeight:'bold',
-                                                    /* Màu mặc định - Cần được override bởi Home.css */
                                                     backgroundColor: tx.status === 'RETURNED' ? '#e8f5e9' : (tx.status === 'OVERDUE' ? '#ffebee' : '#e3f2fd'),
                                                     color: tx.status === 'RETURNED' ? '#2e7d32' : (tx.status === 'OVERDUE' ? '#c62828' : '#1565c0')
                                                 }}>
@@ -357,7 +356,7 @@ const Home: React.FC = () => {
                 <div style={styles.modalOverlay} onClick={() => setSelectedBook(null)}>
                     <div style={{...styles.modalContent, display:'flex', overflow:'hidden', padding:0, maxWidth:'700px'}} onClick={e => e.stopPropagation()}>
                         <button style={{...styles.closeBtn, color:'#999'}} onClick={() => setSelectedBook(null)}>&times;</button>
-                        <div style={{width:'40%', backgroundColor:'#FAF8F1', display:'flex', alignItems:'center', justifyContent:'center', borderRight:'1px solid #8D6E63'}}> {/* Sửa màu nền */}
+                        <div style={{width:'40%', backgroundColor:'#FAF8F1', display:'flex', alignItems:'center', justifyContent:'center', borderRight:'1px solid #8D6E63'}}>
                             <img src={selectedBook.image_url || DEFAULT_IMAGE} style={{maxWidth:'100%', maxHeight:'300px'}} alt="" />
                         </div>
                         <div style={{width:'60%', padding:'30px', display:'flex', flexDirection:'column', justifyContent:'center'}}>
@@ -372,7 +371,7 @@ const Home: React.FC = () => {
                                 style={{
                                     marginTop:'20px', 
                                     padding:'10px', 
-                                    backgroundColor: selectedBook.available_copies > 0 ? '#5D4037' : '#BCAAA4', /* Sửa màu nút */
+                                    backgroundColor: selectedBook.available_copies > 0 ? '#5D4037' : '#BCAAA4',
                                     color:'white', 
                                     border:'none', 
                                     borderRadius:'4px', 
